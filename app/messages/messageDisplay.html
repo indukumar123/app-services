@@ -1,0 +1,9 @@
+﻿<error-message ng-if="!vm.hasAcknowledgements()" message="vm.message.text">
+</error-message>
+<div ng-if="vm.hasAcknowledgements()">
+    <acknowledgement-prompt ng-repeat="ack in vm.acknowledgements()"
+                            acknowledgement="ack"
+                            on-acknowledgement-accepted="vm.onAcknowledgementAccepted()"
+                            on-acknowledgement-unaccepted="vm.onAcknowledgementUnaccepted()">
+    </acknowledgement-prompt>
+</div>

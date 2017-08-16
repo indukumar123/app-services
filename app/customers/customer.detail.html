@@ -1,0 +1,24 @@
+﻿<section data-ng-controller="customerDetailController as vm">
+    <div>
+        <div class="row page-header">
+            <div class="col-sm-6">
+                <h2>{{vm.title}}</h2>
+            </div>
+            <div class="col-sm-6 edit-action-btn">
+                <button ng-if="!vm.agent.isAmbassador && vm.customerPolicyCount == 0" type="submit" class="btn btn-lg edit-action-btn btn-cust" data-ng-click="vm.removeCustomer()">Remove Customer</button>
+                <button type="submit" class="btn btn-lg btn-primary btn-cust" data-ng-click="vm.goToPurchase()">Get a Quote</button>
+            </div>
+        </div>
+
+        <div data-ng-include="'app/customers/customer.detail.information.html'"></div>
+        <hr />
+
+        <div data-ng-if="!vm.agent.isAmbassador">
+            <div data-ng-include="'app/customers/customer.detail.quotes.html'"></div>
+            <hr />
+
+            <div data-ng-include="'app/customers/customer.detail.policies.html'"></div>
+            <hr />
+        </div>
+    </div>
+</section>

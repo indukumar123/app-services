@@ -1,0 +1,432 @@
+﻿<section id="policyTravelers" class="policyEdit">
+    <div class="well module-header">
+        <a class="toggle-container" href="javascript:void(0)" style="text-decoration:none; color:#898989;" data-ng-click="vm.state.container.travelersExpanded = !vm.state.container.travelersExpanded">
+            <div class="row">
+                <div class="col-xs-10">
+                    <h3>Travelers</h3>
+                </div>
+                <div class="col-xs-2">
+                    <i class="fa fa-2x pull-right fa-minus-square" data-ng-show="vm.state.container.travelersExpanded"></i>
+                    <i class="fa fa-2x pull-right fa-plus-square" data-ng-show="!vm.state.container.travelersExpanded"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+
+
+    <div class="well module-content" data-ng-show="vm.state.container.travelersExpanded">
+        <div id="primary-traveler-container" ng-form="primaryTravelerForm">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4> Primary Traveler</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6 col-lg-3">
+                    <label for="ptFirstName">First Name</label>
+                    <input type="text"
+                           id="ptFirstName"
+                           name="ptFirstName"
+                           class="form-control"
+                           placeholder="First Name"
+                           data-ng-maxlength="40"
+                           data-ng-model="vm.state.quote.travelers[0].firstName"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-ng-required="vm.state.rules.traveler.primary.req.firstName == true"
+                           data-ng-disabled="vm.state.rules.traveler.primary.edit.firstName == false" />
+                    <span data-ng-show="primaryTravelerForm.ptFirstName.$invalid && primaryTravelerForm.ptFirstName.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.ptFirstName.$error.required" ng-bind="vm.errors.traveler.firstName.req"></span>
+                    </span>
+                    <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.ptFirstName.$error.maxlength">First Name cannot be over 40 characters</span>
+
+                </div>
+                <div class="form-group col-sm-6 col-lg-3">
+                    <label for="ptLastName">Last Name</label>
+                    <input type="text"
+                           id="ptLastName"
+                           name="ptLastName"
+                           class="form-control"
+                           placeholder="Last Name"
+                           data-ng-maxlength="80"
+                           data-ng-model="vm.state.quote.travelers[0].lastName"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-ng-required="vm.state.rules.traveler.primary.req.lastName == true"
+                           data-ng-disabled="vm.state.rules.traveler.primary.edit.lastName == false" />
+                    <span data-ng-show="primaryTravelerForm.ptLastName.$invalid && primaryTravelerForm.ptLastName.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.ptLastName.$error.required" ng-bind="vm.errors.traveler.lastName.req"></span>
+                    </span>
+                    <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.ptLastName.$error.maxlength">Last Name cannot be over 80 characters</span>
+                </div>
+                <div ng-if="vm.isAirCare()" ng-include="'app/policyedit/policyedit.primarytravelerage.html'"></div>
+                <div class="form-group col-sm-6 col-lg-2" ng-if="vm.isExactCare()">
+                    <label for="tripCost">Traveler Trip Cost</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">$</div>
+                        <input type="text"
+                               name="ptTripCost"
+                               placeholder="Trip Cost"
+                               class="form-control"
+                               data-ng-model="vm.state.quote.travelers[0].tripCost"
+                               data-ng-change="vm.updateTotalTripCost()"
+                               data-ng-keypress="vm.notifyEditingRatingField()"
+                               data-ng-required="vm.state.rules.policy.req.tripCost == true"
+                               data-ng-min="{{vm.state.packageStateConfig.minimumTripCost}}"
+                               data-trip-max="{{vm.state.packageStateConfig.maximumTripCost}}"
+                               bhtp-mask-type="decimal"
+                               bhtp-mask="{{vm.costCurrencyMask}}"
+                               data-ng-travellers="vm.state.quote.travelers.length"
+                               data-ng-keydown="vm.ignoreKeys($event)" />
+            </div>
+                    <div data-ng-show="primaryTravelerForm.ptTripCost.$invalid && primaryTravelerForm.ptTripCost.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.ptTripCost.$error.required" ng-bind="vm.errors.trip.cost.req"></span>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.ptTripCost.$error.ngMin" ng-bind="vm.errors.trip.cost.min"></span>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.ptTripCost.$error.tripMax" ng-bind="vm.errors.trip.cost.max"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6 col-lg-2" ng-if="vm.isExactCare()">
+                    <label for="ptGender">Gender</label>
+                    <select id="ptGender"
+                            name="ptGender"
+                            class="form-control"
+                            data-ng-model="vm.state.quote.travelers[0].gender"
+                            data-ng-keypress="vm.notifyEditingNonRatingField()"
+                            data-ng-change="vm.onLeaveNonRatingSelect()"
+                            data-ng-click="vm.notifyEditingNonRatingSelect()"
+                            data-ng-blur="vm.onLeaveNonRatingSelect()"
+                            data-ng-required="vm.state.rules.traveler.primary.req.gender == true"
+                            data-ng-disabled="vm.state.rules.traveler.primary.edit.gender == false">
+                        <option value="">Select</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                    </select>
+                    <span data-ng-show="primaryTravelerForm.ptGender.$invalid && primaryTravelerForm.ptGender.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.ptGender.$error.required" ng-bind="vm.errors.traveler.gender.req"></span>
+                    </span>
+                </div>
+                <div class="form-group" ng-if="vm.isExactCare()">
+                    <div ng-include="'app/policyedit/policyedit.primarytravelerage.html'"></div>
+            </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Residence Address</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-9">
+                    <label for="polAddress1">Address 1</label>
+                    <input type="text"
+                           id="polAddress1"
+                           name="polAddress1"
+                           class="form-control"
+                           placeholder="Address Line 1"
+                           data-ng-maxlength="50"
+                           data-ng-model="vm.state.quote.policy.policyAddress.address1"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-ng-required="vm.state.rules.policy.req.address1 == true"
+                           data-ng-disabled="vm.state.rules.policy.edit.address1 == false" />
+                    <span data-ng-show="primaryTravelerForm.polAddress1.$invalid && primaryTravelerForm.polAddress1.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.polAddress1.$error.required" ng-bind="vm.errors.traveler.address1.req"></span>
+                    </span>
+                    <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.polAddress1.$error.maxlength">Max length for Address is 50 characters</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-9">
+                    <label for="polAddress2">Address 2</label>
+                    <input type="text"
+                           id="polAddress2"
+                           name="polAddress2"
+                           class="form-control"
+                           placeholder="Address Line 2"
+                           data-ng-maxlength="50"
+                           data-ng-model="vm.state.quote.policy.policyAddress.address2"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-ng-required="vm.state.rules.policy.req.address2 == true"
+                           data-ng-disabled="vm.state.rules.policy.edit.address2 == false" />
+                    <span data-ng-show="primaryTravelerForm.polAddress2.$invalid && primaryTravelerForm.polAddress2.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.polAddress2.$error.required" ng-bind="vm.errors.traveler.address2.req"></span>
+                    </span>
+                    <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.polAddress2.$error.maxlength">Max length for Address is 50 characters</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-5 col-lg-4">
+                    <label for="polCity">City</label>
+                    <input type="text"
+                           id="polCity"
+                           name="polCity"
+                           class="form-control"
+                           placeholder="City"
+                           data-ng-maxlength="50"
+                           data-ng-model="vm.state.quote.policy.policyAddress.city"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-ng-required="vm.state.rules.policy.req.city == true"
+                           data-ng-disabled="vm.state.rules.policy.edit.city == false" />
+                    <span data-ng-show="primaryTravelerForm.polCity.$invalid && primaryTravelerForm.polCity.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.polCity.$error.required" ng-bind="vm.errors.traveler.city.req"></span>
+                    </span>
+                    <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.polCity.$error.maxlength">Max length of City cannot be over 50 characters</span>                    
+                </div>
+                <div class="form-group col-sm-4 col-lg-3">
+                    <label for="polState">State</label>
+                    <input type="text"
+                           id="polState"
+                           name="polState"
+                           class="form-control"
+                           placeholder="State"
+                           data-ng-model="vm.state.quote.policy.policyAddress.stateOrProvince"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-ng-change="vm.onLeaveRatingField()"
+                           data-ng-required="vm.state.rules.policy.req.state == true"
+                           data-ng-disabled="vm.state.rules.policy.edit.state == false" />
+                    <span data-ng-show="primaryTravelerForm.polState.$invalid && primaryTravelerForm.polState.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.polState.$error.required" ng-bind="vm.errors.traveler.state.req"></span>
+                    </span>
+                </div>
+                <div class="form-group col-sm-3 col-lg-2">
+                    <label for="polPostalCode">Postal Code</label>
+                    <input type="text"
+                           id="polPostalCode"
+                           name="polPostalCode"
+                           class="form-control"
+                           placeholder="Postal Code"
+                           data-bhtp-mask="{{vm.postalCodeMask}}"
+                           data-ng-model="vm.state.quote.policy.policyAddress.postalCode"
+                           data-ng-required="vm.state.rules.policy.req.postalCode == true"
+                           data-ng-disabled="vm.state.rules.policy.edit.postalCode == false"
+                           data-valid-zip-code=""
+                           data-is-state="true"
+                           data-state="vm.state.quote.policy.policyAddress.stateOrProvinceEntity.code" />
+                    <div data-ng-show="primaryTravelerForm.polPostalCode.$invalid && primaryTravelerForm.polPostalCode.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.polPostalCode.$error.validZip" ng-bind="vm.errors.traveler.postalCode.valid"></span>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="primaryTravelerForm.polPostalCode.$error.required" ng-bind="vm.errors.traveler.postalCode.req"></span>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Additional Travelers</h4>
+            </div>
+        </div>
+        <div data-ng-repeat="traveler in vm.state.quote.travelers" class="additional-traveler{{vm.isAirCare() ? '-slim' : ''}}-container">
+            <ng-form name="additionalTravelerForm" ng-if="traveler.isPrimary == false">
+                <div class="row">
+                    <div class="col-xs-11">
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-lg-3">
+                                <label for="tFirstName">First Name</label>
+                                <input type="text"
+                                       id="tFirstName"
+                                       name="tFirstName"
+                                       class="form-control"
+                                       placeholder="First Name"
+                                       data-ng-maxlength="40"
+                                       data-ng-model="traveler.firstName"
+                                       data-ng-keypress="vm.notifyEditingNonRatingField()"
+                                       data-ng-required="vm.state.rules.traveler.req.firstName == true"
+                                       data-ng-disabled="vm.state.rules.traveler.edit.firstName == false && vm.travelerIsNotNew(traveler)" />
+                                <span data-ng-show="additionalTravelerForm.tFirstName.$invalid && additionalTravelerForm.tFirstName.$touched">
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tFirstName.$error.required" ng-bind="vm.errors.traveler.firstName.req"></span>
+                                </span>
+                                <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tFirstName.$error.maxlength">First Name cannot be over 40 characters</span>
+                            </div>
+                            <div class="form-group col-sm-6 col-lg-3">
+                                <label for="tLastName">Last Name</label>
+                                <input type="text"
+                                       id="tLastName"
+                                       name="tLastName"
+                                       class="form-control"
+                                       placeholder="Last Name"
+                                       data-ng-maxlength="80"
+                                       data-ng-model="traveler.lastName"
+                                       data-ng-keypress="vm.notifyEditingNonRatingField()"
+                                       data-ng-required="vm.state.rules.traveler.req.lastName == true"
+                                       data-ng-disabled="vm.state.rules.traveler.edit.lastName == false && vm.travelerIsNotNew(traveler)" />
+                                <span data-ng-show="additionalTravelerForm.tLastName.$invalid && additionalTravelerForm.tLastName.$touched">
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tLastName.$error.required" ng-bind="vm.errors.traveler.lastName.req"></span>
+                                </span>
+                                <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tLastName.$error.maxlength">Last Name cannot be over 80 characters</span>
+                            </div>
+                            <div class="form-group col-sm-6 col-lg-3" ng-if="vm.isExactCare()">
+                                <label for="tripCost">Traveler Trip Cost</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">$</div>
+                                    <input type="text"
+                                           name="tTripCost"
+                                           placeholder="Trip Cost"
+                                           class="form-control"
+                                           data-ng-model="traveler.tripCost"
+                                           data-ng-change="vm.updateTotalTripCost()"
+                                           data-ng-keypress="vm.notifyEditingRatingField()"
+                                           data-ng-required="vm.state.rules.policy.req.tripCost == true"
+                                           data-ng-min="{{vm.state.packageStateConfig.minimumTripCost}}"
+                                           data-trip-max="{{vm.state.packageStateConfig.maximumTripCost}}"
+                                           bhtp-mask-type="decimal"
+                                           bhtp-mask="{{vm.costCurrencyMask}}"
+                                           data-ng-travellers="vm.state.quote.travelers.length"
+                                           data-ng-keydown="vm.ignoreKeys($event)" />
+                                </div>
+                                <div data-ng-show="additionalTravelerForm.tTripCost.$invalid && additionalTravelerForm.tTripCost.$touched">
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tTripCost.$error.required" ng-bind="vm.errors.trip.cost.req"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tTripCost.$error.ngMin" ng-bind="vm.errors.trip.cost.min"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tTripCost.$error.tripMax" ng-bind="vm.errors.trip.cost.max"></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-lg-2" ng-if="vm.isExactCare()">
+                                <label for="ptGender">Gender</label>
+                                <select id="ptGender"
+                                        name="ptGender"
+                                        class="form-control"
+                                        data-ng-model="traveler.gender"
+                                        data-ng-keypress="vm.notifyEditingNonRatingField()"
+                                        data-ng-change="vm.onLeaveNonRatingSelect()"
+                                        data-ng-click="vm.notifyEditingNonRatingSelect()"
+                                        data-ng-blur="vm.onLeaveNonRatingSelect()"
+                                        data-ng-required="vm.state.rules.traveler.req.gender == true"
+                                        data-ng-disabled="vm.state.rules.traveler.edit.gender == false">
+                                    <option value="">Select</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Male">Male</option>
+                                </select>
+                                <span data-ng-show="additionalTravelerForm.ptGender.$invalid && additionalTravelerForm.ptGender.$touched">
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.ptGender.$error.required" ng-bind="vm.errors.traveler.gender.req"></span>
+                                </span>
+                            </div>
+                            <div class="dob form-group col-xs-6 col-lg-3" data-ng-if="vm.isAirCare()">
+                                <label for="tDob">Date of Birth</label>
+                                <input type="text"
+                                       data-bhtp-mask="mm/dd/yyyy"
+                                       placeholder="mm/dd/yyyy"
+                                       data-valid-traveler-age=""
+                                       data-validate-eighteen="false"
+                                       id="tDob"
+                                       name="tDob"
+                                       class="form-control"
+                                       data-age-min="{{vm.state.packageStateConfig.minimumAge}}"
+                                       data-age-max="{{vm.state.packageStateConfig.maximumAge}}"
+                                       data-ng-model="traveler.birthDate"
+                                       data-ng-change="vm.onLeaveRatingField(traveler)"
+                                       data-ng-keypress="vm.notifyEditingRatingField()"
+                                       data-ng-disabled="vm.state.rules.traveler.edit.birthdate == false && vm.travelerIsNotNew(traveler)"
+                                       data-ng-required="vm.state.rules.traveler.req.birthdate == true" />
+                                <span data-ng-show="additionalTravelerForm.tDob.$invalid && additionalTravelerForm.tDob.$touched">
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.required" ng-bind="vm.errors.traveler.birthdate.req"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.validDate" ng-bind="vm.errors.traveler.birthdate.format"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.minDate" ng-bind="vm.errors.traveler.birthdate.min"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.maxDate" ng-bind="vm.errors.traveler.birthdate.max"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.ageMin" ng-bind="vm.errors.traveler.birthdate.ageMin"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.ageMax" ng-bind="vm.errors.traveler.birthdate.ageMax"></span>
+                                </span>
+                            </div>
+                            <div class="form-group col-xs-6 col-lg-1" data-ng-if="vm.isAirCare()">
+                                <label for="tAge">Age</label>
+                                <input type="text" id="tAge" name="tAge" class="form-control" data-ng-model="traveler.age" data-ng-disabled="true" />
+                            </div>
+                        </div>
+                        <div class="row" ng-show="vm.isExactCare()">
+                            <div class="dob form-group col-xs-6 col-lg-3">
+                                <label for="tDob">Date of Birth</label>
+                                <input type="text"
+                                       data-bhtp-mask="mm/dd/yyyy"
+                                       placeholder="mm/dd/yyyy"
+                                       data-valid-traveler-age=""
+                                       data-validate-eighteen="false"
+                                       id="tDob"
+                                       name="tDob"
+                                       class="form-control"
+                                       data-age-min="{{vm.state.packageStateConfig.minimumAge}}"
+                                       data-age-max="{{vm.state.packageStateConfig.maximumAge}}"
+                                       data-ng-model="traveler.birthDate"
+                                       data-ng-change="vm.onLeaveRatingField(traveler)"
+                                       data-ng-keypress="vm.notifyEditingRatingField()"
+                                       data-ng-disabled="vm.state.rules.traveler.edit.birthdate == false && vm.travelerIsNotNew(traveler)"
+                                       data-ng-required="vm.state.rules.traveler.req.birthdate == true" />
+                                <span data-ng-show="additionalTravelerForm.tDob.$invalid && additionalTravelerForm.tDob.$touched">
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.required" ng-bind="vm.errors.traveler.birthdate.req"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.validDate" ng-bind="vm.errors.traveler.birthdate.format"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.minDate" ng-bind="vm.errors.traveler.birthdate.min"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.maxDate" ng-bind="vm.errors.traveler.birthdate.max"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.ageMin" ng-bind="vm.errors.traveler.birthdate.ageMin"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tDob.$error.ageMax" ng-bind="vm.errors.traveler.birthdate.ageMax"></span>
+                                </span>
+                            </div>
+                            <div class="form-group col-xs-6 col-lg-1">
+                                <label for="tAge">Age</label>
+                                <input type="text" id="tAge" name="tAge" class="form-control" data-ng-model="traveler.age" data-ng-disabled="true" />
+                            </div>
+                            <div class="form-group col-sm-6 col-lg-3">
+                                <label for="tEmail">Email Address</label>
+                                <input type="text"
+                                       id="tEmail"
+                                       name="tEmail"
+                                       class="form-control"
+                                       placeholder="optional"
+                                       data-ng-model="traveler.email"
+                                       data-ng-keypress="vm.notifyEditingNonRatingField()"
+                                       data-ng-disabled="vm.state.rules.traveler.edit.emailAddress == false && vm.travelerIsNotNew(traveler)"
+                                       data-ng-required="vm.state.rules.traveler.req.emailAddress == true"
+                                       data-valid-email />
+                                <span data-ng-show="additionalTravelerForm.tEmail.$invalid && additionalTravelerForm.tEmail.$touched">
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tEmail.$error.required" ng-bind="vm.errors.traveler.emailAddress.req"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tEmail.$error.invalid" ng-bind="vm.errors.traveler.emailAddress.req"></span>
+                                </span>
+                            </div>
+                            <div class="form-group col-sm-6 col-lg-4" ng-if="vm.isExactCare()">
+                                <label for="tRelationship">
+                                    Relationship to Primary
+                                    <span ng-if="vm.relationshipWarning!=''">
+                                        <a id="toolTip" tooltip="{{vm.relationshipWarning}}" style="text-decoration:none">
+                                            &nbsp;
+                                            <span class="fa fa-question-circle"></span><span class="hidden-xs"></span>
+                                        </a>
+                                    </span>
+                                </label>
+                                <select id="tRelationship"
+                                        name="tRelationship"
+                                        class="form-control"
+                                        data-ng-model="traveler.relationship"
+                                        data-ng-keypress="vm.notifyEditingNonRatingField()"
+                                        data-ng-click="vm.notifyEditingNonRatingSelect()"
+                                        data-ng-change="vm.onLeaveNonRatingSelect()"
+                                        data-ng-blur="vm.onLeaveNonRatingSelect()"
+                                        data-ng-required="vm.state.rules.traveler.req.relationshipToPrimary == true"
+                                        data-ng-disabled="vm.state.rules.traveler.edit.relationshipToPrimary == false && vm.travelerIsNotNew(traveler)">
+                                    <option value="">Select</option>
+                                    <option ng-disabled="!relation.isActive" ng-repeat="relation in vm.state.lookup.relations" ng-selected="relation.content==traveler.relationship" value="{{relation.content}}">{{relation.title}}</option>
+                                </select>
+                                <div data-ng-if="vm.isExactCare()">
+                                    <span data-ng-show="additionalTravelerForm.tRelationship.$invalid && additionalTravelerForm.tRelationship.$touched">
+                                        <span class="help-block haserrorfieldlevel" data-ng-show="additionalTravelerForm.tRelationship.$error.required" ng-bind="vm.errors.traveler.relationship.req"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="tId" name="tId" data-ng-model="traveler.Id" />
+                    <div class="col-xs-1 form-group" ng-show="vm.state.rules.canRemoveTravelers == true || vm.travelerIsNotNew(traveler) == false">
+                        <a ng-show="$index > 0" ng-disabled="readonly" data-ng-click="vm.removeTraveler($index)">
+                            <span class="fa fa-trash-o fa-2x remove-button icon-align-text cursor" style="font-size:24px;"></span>
+                        </a>
+                    </div>
+                </div>
+            </ng-form>
+        </div>
+
+
+
+
+        <!--Primary Traveler is the 25th Traveler-->
+        <div class="row" data-ng-show="vm.state.quote.travelers.length <= vm.state.packageStateConfig.maxTravelers && vm.state.rules.canAddTravelers == true">
+            <div class="col-xs-12">
+                <a class="cursor" data-ng-click="vm.addTraveler()">
+                    <span class="fa fa-plus-circle icon-align-text" style="font-size:24px;"></span>&nbsp;Add Traveler
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

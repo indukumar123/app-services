@@ -1,0 +1,27 @@
+﻿<div>
+    <h2>{{vm.title}}</h2>
+    <div class="col-md-4">
+        <div class="row">
+            <button type="submit" class="btn btn-lg btn-cust"
+                    data-ng-click="vm.confirmSelectedQuotes()"
+                    data-ng-disabled="vm.selected.length == 0">
+                Confirm
+            </button>
+            <button type="submit" class="btn btn-lg btn-cust"
+                    data-ng-click="vm.cancelSelectedQuotes()"
+                    data-ng-disabled="vm.selected.length == 0">
+                Cancel
+            </button>
+        </div>
+    </div>
+    <div ng-if="vm.ready">
+        <data-bhtp-grid-directive data-grid-config="vm.gridConfig"
+                              data-load-data="vm.loadQuotes()"
+                              data-reload-data-flag="false"
+                              data-refresh-data-flag="vm.refreshDataFlag"
+                              data-search-text="vm.searchText"
+                              data-selected="vm.selected"
+                              data-custom-filters="vm.getCustomFilters()">
+    </data-bhtp-grid-directive>
+    </div>
+</div>

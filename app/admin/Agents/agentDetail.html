@@ -1,0 +1,255 @@
+﻿<section data-ng-controller="agentDetailController as vm">
+    <div>
+        <div class="row page-header">
+            <div class="col-xs-8 col-md-6"><h2>{{vm.pageTitle()}}</h2></div>
+            <div class="col-xs-4 col-md-6 edit-action-btn" data-ng-hide="vm.editMode">
+                <button id="btn_back" type="submit" class="btn btn-lg btn-default btn-cust-sec" data-ng-click="vm.goBack()">Cancel</button>
+                <button id="btn_expire_agent" type="submit" class="btn btn-lg btn-default btn-cust-sec" ng-hide="vm.agent.status=='Expired'" ng-disabled="vm.disableAction()" data-ng-click="vm.expireAgent()">Expire</button>
+                <button id="btn_reactivate_agent" type="submit" class="btn btn-lg btn-default btn-cust-sec" ng-hide="vm.agent.status=='Active'" ng-disabled="vm.disableAction()" data-ng-click="vm.activateAgent()">Reactivate</button>
+                <button id="btn_edit_mode" type="submit" class="btn btn-lg btn-primary btn-cust" ng-disabled="vm.disableEdit()" data-ng-click="vm.editAgent()">Edit</button>
+            </div>
+            <div data-ng-show="vm.editMode">
+                <div class="col-md-6 edit-action-btn">
+                    <button id="btn_read_mode" type="submit" class="btn btn-lg btn-default btn-cust-sec" data-ng-click="vm.cancelEdit()">Cancel</button>
+                    <button id="btn_save" type="submit" class="btn btn-lg btn-primary btn-cust" data-ng-click="vm.saveAgent()" data-ng-disabled="agentForm.$invalid">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-show="!vm.editMode && vm.agent.agentCode">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>Name<span ng-show="vm.agent.title">, Title</span></label>
+                    <p class="field wrapword">{{vm.agent.name}}<span ng-show="vm.agent.title">, {{vm.agent.title}}</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <label>Date of Birth</label>
+                    <p class="field">{{vm.agent.birthDate | date:'MM/dd/yyyy'}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>Agent ID</label>
+                    <p class="field">{{vm.agent.agentCode}}</p>
+                </div>
+                <div class="col-sm-6">
+                    <label>Status</label>
+                    <p class="field">{{vm.agent.status}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>Email</label>
+                    <p class="field wrapword">{{vm.agent.email}}</p>
+                </div>
+                <div class="col-sm-6">
+                    <label>Phone Number</label>
+                    <p class="field" ng-show="vm.agent.phone">{{vm.agent.phone}}</p>
+                    <!--<p class="field" ng-show="vm.agent.mobilePhone">{{vm.agent.mobilePhone}} <label>Mobile</label></p>
+                    <p class="field" ng-show="vm.agent.phone">{{vm.agent.phone}} <label>Phone</label></p>
+                    <p class="field" ng-show="vm.agent.homePhone">{{vm.agent.homePhone}} <label>Home Phone</label></p>
+                    <p class="field" ng-show="vm.agent.otherPhone">{{vm.agent.otherPhone}} <label>Other Phone</label></p>-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">&nbsp;</div>
+            </div>
+            <div class="row">
+                <!--
+                <div class="col-sm-6">
+                    <label>Mailing Address</label>
+                    <p class="field">{{vm.agent.address.street}}<br />{{vm.agent.address.city}},&nbsp;{{vm.agent.address.stateOrProvince}}&nbsp;{{vm.agent.address.postalCode}}</p>
+                </div>
+                -->
+                <div class="col-sm-6" ng-show="vm.agent.otherAddress.street || vm.agent.otherAddress.city || vm.agent.otherAddress.stateOrProvince || vm.agent.otherAddress.postalCode">
+                    <label>Mailing Address</label>
+                    <p class="field">{{vm.agent.otherAddress.street}}<br />{{vm.agent.otherAddress.city}},&nbsp;{{vm.agent.otherAddress.stateOrProvince}}&nbsp;{{vm.agent.otherAddress.postalCode}}</p>
+                </div>
+            </div>
+        </div>
+
+        <ng-form class="col-sm-6" id="agentForm" name="agentForm" ng-show="vm.editMode">
+            <div class="row">
+                <div class="col-sm-12 form-group">
+                    <label>All fields required unless otherwise noted.</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 form-group">
+                    <label>First Name</label>
+                    <div data-ng-show="vm.editMode">
+                        <input name="firstName" class="form-control" data-ng-model="vm.updatedAgent.firstName" placeholder="First Name" required maxlength="40" />
+                        <div data-ng-show="agentForm.firstName.$invalid && agentForm.firstName.$touched">
+                            <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.firstName.$error.required">First Name is required.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label>Last Name</label>
+                    <div data-ng-show="vm.editMode">
+                        <input name="lastName" class="form-control" data-ng-model="vm.updatedAgent.lastName" placeholder="Last Name" required maxlength="40" />
+                        <div data-ng-show="agentForm.lastName.$invalid && agentForm.lastName.$touched">
+                            <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.lastName.$error.required">Last Name is required.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label>Date of Birth</label>
+                    <div data-ng-show="vm.editMode">
+                        <div class="input-group">
+                            <input type="text" name="birthDate" id="birthDate" class="form-control" data-ng-model="vm.updatedAgent.birthDate" required
+                                   data-is-open="vm.focusBirthDate"
+                                   data-datepicker-popup="MM/dd/yyyy"
+                                   data-date-picker
+                                   data-valid-traveler-age="" ng-keyup="vm.checkAgentDob()"
+                                   data-validate-eighteen="false" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="vm.openDatePicker($event, 'focusBirthDate')">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.birthDate.$touched && agentForm.birthDate.$error.required">Date of birth must be a valid date {{vm.datePlaceholder}} in format.</span>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.birthDate.$error.maxDate">
+                            Date of birth cannot be in the future.
+                        </span>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.birthDate.$error.minDate">
+                            Date of birth must be greater than 01/01/1900.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-group">
+                    <label>Title <i style="font-weight:normal;">(optional)</i></label>
+                    <div data-ng-show="vm.editMode">
+                        <input name="title" class="form-control" data-ng-model="vm.updatedAgent.title" placeholder="Title" maxlength="100" />
+                    </div>
+                </div>
+            </div>
+            <div class="row" data-ng-show="vm.agentId">
+                <div class="col-sm-6 form-group">
+                    <label>Agent ID</label>
+                    <div>
+                        <input name="agentCode" class="form-control" data-ng-model="vm.updatedAgent.agentCode" disabled />
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label>Status</label>
+                    <div>
+                        <input name="status" class="form-control" data-ng-model="vm.updatedAgent.status" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>
+                        Contact Information
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12  form-group">
+                    <label class="control-label" for="email">Email Address</label>
+                    <input name="email" id="email" required type="text" class="form-control" placeholder="Email Address"
+                           data-ng-model="vm.updatedAgent.email" data-valid-email ng-disabled="vm.agent.agentId!=null" maxlength="80" />
+                    <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.email.$error.required && agentForm.email.$touched">Email Address is required.</span>
+                    <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.email.$error.invalid">Please enter a valid email address.</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12  form-group">
+                    <label class="control-label" for="phone">Phone Number</label>
+                    <input name="phone" id="phone" required type="text" class="form-control" placeholder="Phone Number" data-ng-model="vm.updatedAgent.phone"
+                           bhtp-mask="{{vm.phoneMask}}" data-valid-phone-number-agent />
+                    <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.phone.$error.required && agentForm.phone.$touched">Phone Number is required.</span>
+                    <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.phone.$error.validPhone">Please enter a valid phone number.</span>
+                </div>
+            </div>
+            <div class="row" ng-hide="true">
+                <div class="col-xs-12">
+                    <a class="cursor" data-ng-click="vm.addPhone()">
+                        <span class="fa fa-plus-circle icon-align-text"></span>&nbsp;Add Phone Number
+                    </a>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3>
+                            Mailing Address
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12  form-group">
+                        <label class="control-label" for="otherAddress">Address </label>
+                        <input name="otherAddress" id="otherAddress" type="text" class="form-control" placeholder="Address" data-ng-model="vm.updatedAgent.otherAddress.street" required maxlength="50" />
+                        <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.otherAddress.$error.required && agentForm.otherAddress.$touched">Address is required.</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5  form-group">
+                        <label class="control-label" for="otherAddressCity">City </label>
+                        <input name="otherAddressCity" id="otherAddressCity" type="text" class="form-control" placeholder="City" data-ng-model="vm.updatedAgent.otherAddress.city" required maxlength="40" />
+                        <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.otherAddressCity.$error.required && agentForm.otherAddressCity.$touched">City is required.</span>
+                    </div>
+                    <div class="col-sm-4  form-group">
+                        <label class="control-label" for="otherAddressState">State</label>
+                        <select name="otherAddressStateOrProvince" class="form-control" data-ng-model="vm.updatedAgent.otherAddress.stateOrProvince" required ng-change="vm.validateZipCode(vm.updatedAgent.otherAddress.postalCode,vm.updatedAgent.otherAddress.stateOrProvince)">
+                            <option value="" style="color:#e4e4e4">Select ...</option>
+                            <option data-ng-repeat="state in vm.lookup.states" value="{{state.code}}" ng-selected="state.code == vm.updatedAgent.otherAddress.stateOrProvince">{{state.name}}</option>
+                        </select>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.otherAddressStateOrProvince.$error.required && agentForm.otherAddressStateOrProvince.$touched">State is required.</span>
+                    </div>
+                    <div class="col-sm-3  form-group">
+                        <label class="control-label" for="otherAddressPostalCode">Postal Code </label>
+                        <input type="text"
+                               id="otherAddressPostalCode"
+                               name="otherAddressPostalCode"
+                               class="form-control"
+                               placeholder="Postal Code"
+                               required
+                               data-ng-model="vm.updatedAgent.otherAddress.postalCode"
+                               data-ng-change="vm.validateZipCode(vm.updatedAgent.otherAddress.postalCode,vm.updatedAgent.otherAddress.stateOrProvince)"
+                               data-state="vm.updatedAgent.otherAddress.stateOrProvince" maxlength="5" />
+                        <span class="help-block error-inputfield" data-ng-show="agentForm.otherAddressPostalCode.$error.validZip && agentForm.otherAddressPostalCode.$touched">Please enter a valid Postal Code</span>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="agentForm.otherAddressPostalCode.$error.required && agentForm.otherAddressPostalCode.$touched">Postal Code is required.</span>
+                    </div>
+                </div>
+                <div data-ng-show="vm.editMode">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="checkbox" name="copyMe" id="copyMe" class="custom-checkbox" data-ng-model="vm.updatedAgent.copyMe" />
+                            <label for="copyMe" class="checkbox-label">
+                                Copy me on policy details and reminders
+                            </label>
+
+                            <input type="checkbox" name="showCommission" id="showCommission" class="custom-checkbox" data-ng-model="vm.updatedAgent.showCommission" />
+                            <label for="showCommission" class="checkbox-label">
+                                Allow Agent to View Commissions
+                            </label>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <button type="submit" id="btn_cancel_agent" class="btn btn-lg btn-default btn-cust-sec" data-ng-click="vm.cancelEdit()">Cancel</button>
+                        <button type="submit" id="btn_save_agent" class="btn btn-lg btn-primary btn-cust" data-ng-click="vm.saveAgent()" data-ng-disabled="agentForm.$invalid">Save</button>
+                    </div>
+                </div>
+            </div>
+        </ng-form>
+
+        <div data-superusermodalconfirmation="" data-modal-id="popupExpireAgent" data-action="vm.confirmExpireAgents()" data-title="{{vm.modalTitle}}" data-message="{{vm.expireAgentMessage}}"
+             data-yes="{{vm.yesButtonText}}" data-no="{{vm.noButtonText}}">
+        </div>
+        <div data-superusermodalconfirmation="" data-modal-id="popupActivateAgent" data-action="vm.confirmReactivateAgents()" data-title="{{vm.modalTitle}}" data-message="{{vm.expireAgentMessage}}"
+             data-yes="{{vm.yesButtonText}}" data-no="{{vm.noButtonText}}">
+        </div>
+    </div>
+</section>

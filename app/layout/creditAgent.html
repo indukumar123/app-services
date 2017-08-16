@@ -1,0 +1,58 @@
+﻿<span class="cursor ng-hide" ng-show="vm.collapsed" ng-click="vm.openCreditAgentPanel();">
+    Forgot to give credit to your agent? &nbsp; <span class="fa fa-angle-down"></span>
+</span>
+<div class="agent-credit col-xs-12" ng-show="!vm.collapsed && !vm.wasAgentCredited && !vm.cycleComplete">
+    <span class="close-panel fa fa-remove" ng-click="vm.collapseCreditAgentPanel();"></span>
+    <div class="form-group row" ng-hide="vm.collapsed || vm.didAgentHelp">
+        <div class="col-xs-12">
+            <div style="margin-right:15px;display:inline-block;" class="form-group">
+                Did an agent help you with this sale?
+            </div>
+            <div class="btn btn-success" ng-click="vm.agentHelped();" style="margin:0 auto;">
+                YES
+            </div>
+        </div>
+    </div>
+    <div class="form-group row ng-hide" ng-show="vm.didAgentHelp && !vm.wasAgentCredited">
+        <div class="col-xs-12">
+            Please enter your agent's name or ID number.
+
+        </div>
+    </div>
+    <div class="form-group row ng-hide" ng-show="vm.didAgentHelp && !vm.wasAgentCredited">
+        <div class="form-group row" ng-class="{'has-error': vm.showError}">
+            <div class="agent-name col-xs-12 col-sm-5">
+                <input name="agentName" type="text" id="AgentName" class="form-control" placeholder="Agent Name"
+                       data-ng-model="vm.searchValues.agentName" data-display-key="name" data-agent-search="" data-agent="vm.searchValues" ng-blur="vm.hideOther('code')"
+                       data-agent-on-selected="" />
+            </div>
+
+            <div class="or col-sm-1" ng-hide="vm.wasAgentSelected">
+                <span class="or"> or </span>
+            </div>
+            <div class="agent-id col-xs-12 col-sm-3" ng-hide="vm.wasAgentSelected">
+                <input name="AgentId" type="text" id="AgentId" class="form-control" placeholder="Agent ID"
+                       data-ng-model="vm.searchValues.agentCode" data-display-key="code" data-agent-search="" data-agent="vm.searchValues" ng-blur="vm.hideOther('name')" />
+            </div>
+            <div class="form-group col-xs-12" ng-class="{'col-sm-6': vm.wasAgentSelected, 'col-sm-3': !vm.wasAgentSelected}">
+                <div class="btn btn-success" ng-click="vm.giveAgentCredit();">
+                    GIVE AGENT CREDIT
+                </div>
+                <div class="btn btn-default" ng-click="vm.cancelAgentCredit();" ng-show="vm.wasAgentSelected" style="margin-left:10px;">
+                    CANCEL
+                </div>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="{'has-error': vm.showError}">
+            <div class="form-group col-xs-12" ng-show="vm.showError">
+                <div class="help-block col-xs-12" style="margin-top:-15px;">
+                    Agent Name or ID is required to give credit to your agent.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="well well-alert well-success animate-show ng-hide" ng-show="vm.wasAgentCredited && !vm.cycleComplete">
+    <span class="close-panel-thanks fa fa-remove" ng-click="vm.closeAgentPanel();"></span>
+    Thank you for giving {{vm.agentName}} credit!
+</div>

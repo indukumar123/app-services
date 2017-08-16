@@ -1,0 +1,40 @@
+﻿<section id="login-view" class="mainbar" data-ng-controller="authController as vm" style="border:1px solid #fff;">
+    <div class="container signin-container">
+        <div class="row">
+            <div class="col-lg-5 col-md-5 signin-page-logo" ng-show="!vm.hideForm">
+                <img src="{{vm.cdnUrl}}images/BHTP_logo_distressed-blue-large.png" />
+            </div>
+
+            <!-- Four Columns -->
+            <div class="col-lg-7 col-md-7">
+                <form name="loginForm" class="form-horizontal signin-form" ng-submit="vm.validateAndLogin()" form-autofill-fix ng-show="!vm.hideForm" novalidate>
+                    <h3 class="signin-heading">AGENTS | Sign In</h3>
+                    <div class="form-group" ng-class="{'has-error': (vm.usernameRequiredError || vm.usernameEmailError) && (loginForm.username.$touched||loginForm.$submitted)}">
+                        <div class="col-sm-12">
+                            <input type="text" ng-model="vm.username" name="username" id="UserName" class="form-control col-sm-12" placeholder="Email Address" autofocus required ng-blur="vm.validateEmail()">
+                            <span class="haserrorfieldlevel" ng-show="vm.usernameRequiredError && (loginForm.username.$touched||loginForm.$submitted)">Email Address is required.</span>
+                            <span class="haserrorfieldlevel" ng-show="vm.usernameEmailError && (loginForm.username.$touched || loginForm.$submitted)">This needs to be an Email Address.</span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': vm.passwordRequiredError && (loginForm.password.$touched || loginForm.$submitted)}">
+                        <div class="col-sm-12">
+                            <input type="password" ng-model="vm.password" id="Password" name="password" class="form-control col-sm-12" placeholder="Password" required ng-blur="vm.validatePassword()">
+                            <span class="haserrorfieldlevel" ng-show="vm.passwordRequiredError && (loginForm.password.$touched || loginForm.$submitted)">Password is required.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <span class="haserrorfieldlevel" ng-show="vm.loginError!=null">{{vm.loginError}}</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-cust btn-block">Sign In</button>
+                    <div class="form-group">
+                        <div class="col-sm-12 signin-forgotpass text-center">
+                            <a href="login/forgot">I forgot my Password</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

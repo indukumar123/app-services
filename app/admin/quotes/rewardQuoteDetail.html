@@ -1,0 +1,45 @@
+﻿<section id="rewardQuoteDetail">
+    <div>
+        <div class="row page-header">
+            <div class="col-sm-6">
+                <h2>Verify Points for Quote #{{vm.quote.quoteNumber}}</h2>
+            </div>
+            <div class="col-sm-6 edit-action-btn">
+                <button type="submit" class="btn btn-lg btn-default btn-cust-sec" data-ng-disabled="vm.errorMessage" data-ng-click="vm.confirmPoints()">Confirm</button>
+                <button type="submit" class="btn btn-lg btn-default btn-cust-sec" data-ng-disabled="vm.errorMessage" data-ng-click="vm.cancelPoints()">Cancel</button>
+            </div>
+        </div>
+
+        <div data-ng-show="vm.errorMessage">
+            <p class="haserrorfieldlevel">{{vm.errorMessage}}</p>
+        </div>
+
+        <div data-ng-show="!vm.errorMessage">
+            <div class="row">
+                <div class="col-sm-4">
+                    <label>Product</label>
+                    <p class="field">{{vm.quote.packageName}}</p>
+                </div>
+                <div class="col-sm-4">
+                    <label>Quote Date</label>
+                    <p class="field">{{vm.quote.purchaseDate | datelocal : vm.quote.timezone}}</p>
+                </div>
+                <div class="col-sm-4">
+                    <label>Points</label>
+                    <p class="field">{{vm.quote.points}}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <label>Primary Traveler</label>
+                    <p class="field">{{vm.quote.travelerName}}</p>
+                </div>
+                <div class="col-sm-4">
+                    <label>Postal Code</label>
+                    <p class="field">{{vm.quote.postalCode}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

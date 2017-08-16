@@ -1,0 +1,44 @@
+﻿<div class="row" ng-if="vm.hasFaqs">
+    <h2>{{vm.title}}&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" ng-click="vm.switch()"><span class="fa fa-chevron-circle-down" ng-style="{'color' : (!vm.expanded) ? '#c0c3cc': '#364f78'}"></span></a></h2>
+    <div class="row" ng-if="vm.expanded">
+        <div class="col-lg-9 col-md-10 col-sm-11">
+            <p>
+                {{vm.mainHeader}}
+            </p>
+        </div>
+        <div class="col-lg-9 col-md-10 col-sm-11">
+            <div class="panel-group" id="accordion" ng-repeat="group in vm.groups | orderBy: 'id'">
+                <div class="panel panel-default">
+                    <div class="panel-heading" data-ng-class="group.isSelected ? '': ''"
+                         data-ng-click="vm.toggleGroupSelection(group)">
+                        <h4 style="font-weight:bold;margin:0px;">
+                            <span class="accordion-toggle" data-parent="#accordion" data-toggle="collapse">
+                                <a style="text-decoration:none" href="#">{{group.name}} Questions</a>
+                            </span>
+                        </h4>
+                    </div>
+                    <div id="{{group.name}}" data-ng-class="group.isSelected ? 'panel-collapse collapse in ': 'panel-collapse collapse'">
+                        <div class="panel-body">
+                            <div class="panel-group" id="accordion-{{group.name}}">
+                                <div class="panel panel-default" data-ng-repeat="faq in group.details">
+                                    <div class="panel-heading" data-ng-class="faq.isSelected ? '': ''"
+                                         data-ng-click="vm.toggleSelection(groups,faq)">
+                                        <h5 class="panel-title">
+                                            <span class="accordion-toggle" data-parent="#accordion-{{group.name}}" data-toggle="collapse">
+                                                <a style="text-decoration:none" href="#">{{faq.title}}</a>
+                                            </span>
+                                        </h5>
+                                    </div>
+                                    <div id="{{group.name}}{{faq.id}}" data-ng-class="faq.isSelected ? 'panel-collapse collapse in ': 'panel-collapse collapse'">
+                                        <div class="panel-body" ng-bind-html="faq.content">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+﻿<div id="quote-eligible-modal" class="panel-primary" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header modal-heading">
+        <button type="button" class="close" data-ng-click="$dismiss()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-header-h4">Quote Not Eligible</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                {{eligibilityMessage}}
+                <br/>
+                Do you still want to navigate away?
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button name="done" type="button" class="btn btn-lg btn-default btn-cust-sec" data-ng-click="$close(nextStepId)">Yes</button>
+        <button name="close" type="button" autofocus="" class="btn btn-lg btn-primary btn-cust" data-ng-click="$dismiss()">No</button>
+    </div>
+</div>

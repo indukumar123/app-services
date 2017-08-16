@@ -1,0 +1,204 @@
+﻿<h4>Policy Buyer</h4>
+<div ng-form="policyBuyerForm">
+    <div class="row">
+        <!-- First Name -->
+        <div class="form-group col-sm-4 col-lg-3">
+            <label>First Name </label>
+            <input
+                id="policy-buyer-first-name"
+                class="form-control"
+                name="firstName"
+                type="text"
+                placeholder="First Name"
+                required
+                data-ng-maxlength="40"
+                data-ng-model="vm.policyBuyer.firstName"
+                ng-model-options="{ updateOn: 'blur' }" />
+            <div data-ng-show="policyBuyerForm.firstName.$invalid && policyBuyerForm.firstName.$touched">
+                <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.firstName.$error.required && policyBuyerForm.firstName.$touched" ng-bind="vm.errors.traveler.firstName.req"></span>
+            </div>
+            <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.firstName.$error.maxlength">First Name cannot be over 40 characters</span>
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group col-sm-4 col-lg-3">
+            <label>Last Name</label>
+            <input
+                id="policy-buyer-first-name"
+                class="form-control"
+                name="lastName"
+                type="text"
+                placeholder="Last Name"
+                required
+                data-ng-maxlength="80"
+                data-ng-model="vm.policyBuyer.lastName"
+                ng-model-options="{ updateOn: 'blur' }"/>
+            <div data-ng-show="policyBuyerForm.lastName.$invalid && policyBuyerForm.lastName.$touched">
+                <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.lastName.$error.required && policyBuyerForm.lastName.$touched" ng-bind="vm.errors.traveler.lastName.req"></span>
+            </div>
+            <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.lastName.$error.maxlength">Last Name cannot be over 80 characters</span>
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="form-group col-sm-4 col-lg-3">
+            <label>Date of Birth</label>
+            <div class="input-group">
+                <input
+                    id="policy-buyer-dateOfBirth"
+                    class="form-control"
+                    name="dateOfBirth"
+                    type="text"
+                    data-ng-model="vm.policyBuyer.dateOfBirth"
+                    data-date-picker
+                    data-datepicker-popup="MM/dd/yyyy"
+                    data-is-open="vm.policyBuyer.dateOfBirthDatePicker"
+                    data-valid-traveler-age="true"
+                    data-validate-eighteen="false"
+                    data-min-date="minDate"
+                    data-age-min="{{vm.packageStateConfig.minimumAge}}"
+                    data-age-max="{{vm.packageStateConfig.maximumAge}}"
+                    data-close-text="Close"
+                    data-ng-keyup="keypressCallback($event)"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event)">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </div>
+            <div data-ng-show="policyBuyerForm.dateOfBirth.$invalid && policyBuyerForm.dateOfBirth.$touched">
+                <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.dateOfBirth.$error.date" ng-bind="vm.errors.traveler.birthdate.format"></span>
+                <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.dateOfBirth.$error.validTravelerAge" ng-bind="vm.errors.traveler.birthdate.over18"></span>
+                <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.dateOfBirth.$error.validDate" ng-bind="vm.errors.traveler.birthdate.format"></span>
+                <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.dateOfBirth.$error.minDate" ng-bind="vm.errors.traveler.birthdate.min"></span>
+                <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.dateOfBirth.$error.maxDate" ng-bind="vm.errors.traveler.birthdate.max"></span>
+                <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.dateOfBirth.$error.ageMin" ng-bind="vm.errors.traveler.birthdate.ageMin"></span>
+                <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.dateOfBirth.$error.ageMax" ng-bind="vm.errors.traveler.birthdate.ageMax"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <!-- Email Address  -->
+        <div class="form-group col-sm-4 col-lg-3">
+            <label>Email Address</label>
+            <input
+                id="policy-buyer-emailAddress"
+                class="form-control"
+                name="emailAddress"
+                placeholder="Email Address"
+                type="email"
+                ng-required="!vm.policyBuyer.noEmailAddress"
+                ng-keyup="vm.onPolicyBuyerEmailAddressKeyUp($event)"
+                data-ng-model="vm.policyBuyer.emailAddress"
+                data-ng-maxlength="80" />
+            <label id="no-email-address">
+                <input
+                    id="policy-buyer-noEmailAddress"
+                    name="noEmailAddress"
+                    type="checkbox"
+                    data-ng-model="vm.policyBuyer.noEmailAddress"
+                    ng-change="vm.onNoEmailAddressChange(vm.policyBuyer.noEmailAddress)" />
+                <span>No Email Address</span>
+            </label>
+            <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.emailAddress.$error.required && policyBuyerForm.emailAddress.$touched" ng-bind="vm.errors.traveler.email.opt"></span>
+            <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.emailAddress.$error.email" ng-bind="vm.errors.traveler.email.format"></span>
+            <span class="haserrorfieldlevel" data-ng-show="policyBuyerForm.emailAddress.$error.maxlength">Email cannot be over 80 character</span>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="form-group col-sm-4 col-lg-3">
+            <label>Phone Number</label>
+            <input
+                id="policy-buyer-phoneNumber"
+                class="form-control"
+                name="phoneNumber"
+                type="text"
+                data-ng-model="vm.policyBuyer.phoneNumber"
+                data-bhtp-mask="{{ vm.phoneMask }}"
+                ng-keyup="keypressCallback($event)"
+                ng-model-options="{ updateOn: 'blur' }" />
+            <span class="help-block haserrorfieldlevel" data-ng-show="policyBuyerForm.phoneNumber.$error.validPhone" ng-bind="vm.errors.traveler.phone.format"></span>
+        </div>
+    </div>
+    <div class="row">
+
+        <!-- Address 1 -->
+        <div class="form-group col-md-8 col-sm-9">
+            <label>Address Line 1</label>
+            <input
+                id="policy-buyer-address1"
+                class="form-control"
+                name="addressLine1"
+                ng-maxlength="50"
+                data-ng-model="vm.policyBuyer.address.address1"/>
+            <div data-ng-show="policyBuyerForm.addressLine1.$invalid && policyBuyerForm.addressLine1.$touched">
+                <span class="help-block haserrorfieldlevel" data-ng-show="policyBuyerForm.addressLine1.$error.maxlength">Max length for Address is 50 characters</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <!-- Address 2 -->
+        <div class="form-group col-md-8 col-sm-9">
+            <label>Address Line 2</label>
+            <input
+                id="policy-buyer-address2"
+                class="form-control"
+                name="addressLine2"
+                ng-maxlength="50"
+                data-ng-model="vm.policyBuyer.address.address2" />
+            <div data-ng-show="policyBuyerForm.addressLine2.$invalid && policyBuyerForm.addressLine2.$touched">
+                <span class="help-block haserrorfieldlevel" data-ng-show="policyBuyerForm.addressLine2.$error.maxlength">Max length for Address is 50 characters</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-4 col-sm-4">
+
+            <!-- City -->
+            <label>City</label>
+            <input
+                id="policy-buyer-city"
+                class="form-control"
+                name="city"
+                ng-maxlength="40"
+                data-ng-model="vm.policyBuyer.address.city" />
+            <div data-ng-show="policyBuyerForm.city.$invalid && policyBuyerForm.city.$touched">
+                <span class="help-block haserrorfieldlevel" data-ng-show="policyBuyerForm.city.$error.maxlength" ng-bind="vm.errors.traveler.city.length"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-4 col-lg-2">
+            
+            <!-- State -->
+            <label>State</label>
+            <select
+                id="state"
+                class="form-control"
+                name="state"
+                data-ng-model="vm.policyBuyer.address.state">
+                <option
+                    ng-repeat="state in vm.states"
+                    ng-selected="{{ state.code == vm.policyBuyer.address.state }}"
+                    value="{{ state.code }}">
+                    {{ state.name }}
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-md-2 col-sm-2">
+
+            <!-- Postal Code -->
+            <label>Postal Code</label>
+            <input
+                id="policy-buyer-postalCode"
+                class="form-control"
+                name="postalCode"
+                data-valid-zip-code=""
+                data-ng-model="vm.policyBuyer.address.postalCode"
+                data-state="vm.policyBuyer.address.state"
+                bhtp-mask="{{ vm.postalCodeMask }}" />
+            <div data-ng-show="policyBuyerForm.postalCode.$invalid && policyBuyerForm.postalCode.$touched">
+                <span class="help-block haserrorfieldlevel" data-ng-show="policyBuyerForm.postalCode.$error.validZip" ng-bind="vm.errors.traveler.postalCode.valid"></span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+﻿<div class="row">
+    <div class="col-sm-12">
+        <span>{{vm.labelText}}</span>
+        <span ng-if="vm.toolTipText">
+            <a style="margin-right:1rem;" tooltip="{{vm.toolTipText}}">
+                <span class="fa fa-question-circle"></span><span class="hidden-xs"></span>
+            </a>
+        </span>
+        <label for="bhtpSwitchYes">
+            <span>Yes</span>
+            <input id="bhtpSwitchYes" ng-model="vm.switchState" ng-change="vm.handleStateChanged(vm.switchState)" name="bhtpSwitch" type="radio" value="true"/>
+        </label>
+        <label for="bhtpSwitchNo">
+            <span>No</span>
+            <input id="bhtpSwitchNo" ng-model="vm.switchState" ng-change="vm.handleStateChanged(vm.switchState)" name="bhtpSwitch" type="radio" value="false"/>
+        </label>
+    </div>
+</div>

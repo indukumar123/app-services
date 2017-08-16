@@ -1,0 +1,190 @@
+﻿<div class="row batch-table-container">
+    <div class="error-indicators">
+        <div class="table-row"></div>
+        <div class="table-row"></div>
+        <div ng-repeat="dataRow in vm.rows track by $index" class="table-row">
+            <div class="error-indicator-cell table-cell bordered-cell" ng-show="vm.hasErrors($index)" ng-click="vm.showErrors($index)">
+                <span class="error-icon fa fa-warning text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="line-numbers">
+        <div class="table-row">
+            <div class="line-number-cell bordered-cell corner-cell"></div>
+        </div>
+        <div class="table-row">
+            <div class="line-number-cell bordered-cell"></div>
+        </div>
+        <div ng-repeat="dataRow in vm.rows track by $index" class="table-row" ng-mouseover="vm.hoverOnRow($index)" ng-mouseleave="vm.hoverOffRow()">
+            <div class="line-number-cell table-cell bordered-cell" ng-click="vm.promptDelete($index)">
+                <span ng-show="vm.showLineNumber($index)" class="line-number">{{::$index + 1}}</span>
+                <span ng-show="vm.showDeleteIcon($index)" class="delete-icon fa fa-trash"></span>
+            </div>
+        </div>
+    </div>
+    <div class="entry-table">
+        <div class="table-row floating" style="display:none;" ng-hide="vm.rowShouldBeDisabled(vm.currentEditRowIndex)">
+            <div ng-repeat="(key, value) in vm.rows[vm.currentEditRowIndex].data track by $index" ng-style="{'flex': vm.headers[$index].width}" class="table-cell bordered-cell" ng-init="columnIndex = $index">
+                <!-- NOTE: ng-if creates a new scope, so in order to access $parent.$index you need to use an additional $parent to get out of the ng-if scope -->
+                <!-- standard text or calculated -->
+                <input
+                    class="basic"
+                    type="text"
+                    ng-model-options="vm.modelOptions"
+                    ng-if="vm.columnIsFieldType(columnIndex, vm.fieldTypes.text) || vm.columnIsFieldType(columnIndex, vm.fieldTypes.calculated)"
+                    ng-disabled="vm.columnIsFieldType(columnIndex, vm.fieldTypes.calculated)"
+                    ng-model="vm.rows[vm.currentEditRowIndex].data[key]"
+                    ng-focus="vm.cellFocused(columnIndex, vm.currentEditRowIndex)"
+                    ng-change="vm.cellChanged(columnIndex, vm.currentEditRowIndex)"
+                    ng-blur="vm.cellBlurred(columnIndex, vm.currentEditRowIndex)" />
+
+                <!-- number (no decimal) -->
+                <input
+                    class="basic"
+                    type="tel"
+                    ng-model-options="vm.modelOptions"
+                    ng-keypress="vm.numberOnKeyPress($event)"
+                    ng-if="vm.columnIsFieldType(columnIndex, vm.fieldTypes.number)"
+                    ng-model="vm.rows[vm.currentEditRowIndex].data[key]"
+                    ng-focus="vm.cellFocused(columnIndex, vm.currentEditRowIndex)"
+                    ng-change="vm.cellChanged(columnIndex, vm.currentEditRowIndex)"
+                    ng-blur="vm.cellBlurred(columnIndex, vm.currentEditRowIndex)" />
+
+                <!-- decimal -->
+                <input
+                    class="basic"
+                    type="tel"
+                    ng-model-options="vm.modelOptions"
+                    ng-keypress="vm.decimalOnKeyPress($event, columnIndex, vm.currentEditRowIndex)"
+                    ng-if="vm.columnIsFieldType(columnIndex, vm.fieldTypes.decimal)"
+                    ng-model="vm.rows[vm.currentEditRowIndex].data[key]"
+                    ng-focus="vm.cellFocused(columnIndex, vm.currentEditRowIndex)"
+                    ng-change="vm.cellChanged(columnIndex, vm.currentEditRowIndex)"
+                    ng-blur="vm.cellBlurred(columnIndex, vm.currentEditRowIndex)" />
+
+                <!-- dropdown -->
+                <select
+                    ng-model-options="vm.modelOptions"
+                    ng-if="vm.columnIsFieldType(columnIndex, vm.fieldTypes.dropdown)"
+                    ng-model="vm.rows[vm.currentEditRowIndex].data[key]"
+                    ng-focus="vm.cellFocused(columnIndex, vm.currentEditRowIndex)"
+                    ng-change="vm.cellChanged(columnIndex, vm.currentEditRowIndex)"
+                    ng-blur="vm.cellBlurred(columnIndex, vm.currentEditRowIndex)"
+                    ng-options="item.key as item.displayValue for item in vm.headers[columnIndex].dropDownPairs"></select>
+
+                <!-- date -->
+                <input
+                    type="tel"
+                    class="basic"
+                    bhtp-mask="{{::vm.dateMask}}"
+                    ng-model-options="vm.modelOptions"
+                    ng-if="vm.columnIsFieldType(columnIndex, vm.fieldTypes.date)"
+                    ng-model="vm.rows[vm.currentEditRowIndex].data[key]"
+                    ng-focus="vm.cellFocused(columnIndex, vm.currentEditRowIndex)"
+                    ng-change="vm.cellChanged(columnIndex, vm.currentEditRowIndex)"
+                    ng-blur="vm.cellBlurred(columnIndex, vm.currentEditRowIndex)" />
+
+                <!-- phonenumber -->
+                <input
+                    type="tel"
+                    class="basic"
+                    bhtp-mask="{{::vm.phoneMask}}"
+                    ng-model-options="vm.modelOptions"
+                    ng-if="vm.columnIsFieldType(columnIndex, vm.fieldTypes.phonenumber)"
+                    ng-model="vm.rows[vm.currentEditRowIndex].data[key]"
+                    ng-focus="vm.cellFocused(columnIndex, vm.currentEditRowIndex)"
+                    ng-change="vm.cellChanged(columnIndex, vm.currentEditRowIndex)"
+                    ng-blur="vm.cellBlurred(columnIndex, vm.currentEditRowIndex)" />
+
+                <!-- typeahead -->
+                <input
+                    class="basic"
+                    ng-model-options="vm.modelOptions"
+                    ng-if="vm.columnIsFieldType(columnIndex, vm.fieldTypes.typeahead)"
+                    ng-model="vm.rows[vm.currentEditRowIndex].data[key]"
+                    ng-focus="vm.cellFocused(columnIndex, vm.currentEditRowIndex)"
+                    ng-change="vm.cellChanged(columnIndex, vm.currentEditRowIndex)"
+                    ng-blur="vm.cellBlurred(columnIndex, vm.currentEditRowIndex)"
+                    batch-typeahead="{{vm.headers[columnIndex].typeaheadUrl}}"
+                    data-entity="vm.rows[vm.currentEditRowIndex].data[key + 'Entity']"
+                    data-display-key="{{vm.headers[columnIndex].typeaheadDisplayProperty}}"
+                    data-id-key="{{vm.headers[columnIndex].typeaheadIdKey}}"
+                    data-disallow-free-form="vm.headers[columnIndex].allowFreeform === false"
+                    data-hide-error="true"
+                    autocomplete="off"
+                    spellcheck="false" />
+            </div>
+        </div>
+        <div class="table-row group-headings">
+            <div ng-repeat="group in vm.groups track by group.label + group.width" ng-style="{'flex': group.width,'-ms-flex': group.msWidth}" class="table-group-heading bordered-cell">
+                <span>{{group.label}}</span>
+            </div>
+        </div>
+        <div class="table-row column-headings">
+            <div ng-repeat="header in vm.headers track by header.bhtpModel" ng-style="{'flex': header.width }" class="table-column-heading bordered-cell" ng-click="vm.sortColumn(header.bhtpModel)">
+                <span>{{header.label}}<span ng-class="vm.getHeaderClass(header.bhtpModel)"></span></span>
+            </div>
+        </div>
+        <div ng-repeat="dataRow in vm.rows track by dataRow.uniqueId" class="table-row" ng-mouseover="vm.hoverOnRow($index)" ng-mouseleave="vm.hoverOffRow()">
+            <table-edit-row
+                header-definition="vm.headers"
+                row="dataRow"
+                row-index="$index"
+                cell-should-be-disabled="vm.cellShouldBeDisabled"
+                placeholder-clicked="vm.placeholderClicked"
+                cell-focused="vm.cellFocused"
+                cell-changed="vm.cellChanged"
+                cell-blurred="vm.cellBlurred"
+                edit-mode="rowIndex == vm.currentEditRowIndex"
+                field-types="vm.fieldTypes"></table-edit-row>
+        </div>
+    </div>
+</div>
+<div class="modal fade bhtpPopup" id="confirmDelete" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-header-h4">Confirm Delete</h4>
+            </div>
+            <div class="modal-body" style="padding: 25px 15px 0 15px">
+                <div class="btn-group" id="mode-group" data-toggle="buttons">
+                    <p>
+                        Are you sure you would like to delete row {{vm.pendingDelete + 1}}?
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-lg btn-default btn-cust btn-cancel" data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-lg btn-default btn-cust btn-delete" data-dismiss="modal" data-ng-click="vm.removeRow(vm.pendingDelete)">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bhtpPopup" id="errorsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-header-h4">Errors</h4>
+            </div>
+            <div class="modal-body" style="padding: 25px 15px 0 15px">
+                <ul>
+                    <li ng-repeat="(fieldError, fieldErrorMessage) in vm.rows[vm.errorRowIndex].fieldErrors">{{fieldErrorMessage}}</li>
+                    <li ng-repeat="apiError in vm.rows[vm.errorRowIndex].apiErrors">{{apiError}}</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-lg btn-default btn-cust btn-primary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,158 @@
+﻿<section data-ng-controller="kpiController as vm" ng-form="kpiForm">
+    <div class="row">
+        <div class="col-xs-6 col-md-2">
+            <h2>At A Glance</h2>
+        </div>
+        <div class="col-xs-6 col-md-3 form-group kpi-dropdown">
+            <label class="sr-only" for="selectedRange">Select Range</label>
+            <select class="form-control"
+                    name="selectedRange"
+                    data-ng-model="vm.selectedRange"
+                    data-ng-options="range.period for range in vm.rangeOptions"></select>
+        </div>
+        
+        <div class="hidden-sm hidden-xs col-md-2 form-group kpi-dropdown" ng-show="vm.selectedRange.value == 5">
+            <label for="fromDate" class="sr-only">From Date</label>
+            <div class="input-group">
+                <input type="text"
+                       name="fromDate"
+                       placeholder="From"
+                       data-datepicker-popup="MM/dd/yyyy"
+                       data-date-picker
+                       data-ng-model="vm.dateFilter.fromDate"
+                       class="form-control"
+                       data-is-open="vm.dateFilter.fromDateDatePicker"
+                       data-min-date="vm.minDate"
+                       ng-required="true"
+                       data-close-text="Close"
+                       ng-change="vm.dateChanged()" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, vm.dateFilter, 'fromDateDatePicker')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="hidden-sm hidden-xs col-md-2 form-group kpi-dropdown" ng-show="vm.selectedRange.value == 5">
+            <label for="toDate" class="sr-only">To Date</label>
+            <div class="input-group">
+                <input type="text"
+                       name="toDate"
+                       placeholder="To"
+                       data-datepicker-popup="MM/dd/yyyy"
+                       data-date-picker
+                       data-ng-model="vm.dateFilter.toDate"
+                       class="form-control"
+                       data-is-open="vm.dateFilter.toDateDatePicker"
+                       data-min-date="vm.minDate"
+                       ng-required="true"
+                       data-close-text="Close"
+                       ng-change="vm.dateChanged()" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, vm.dateFilter, 'toDateDatePicker')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="hidden-sm hidden-xs kpi-dropdown" ng-class="vm.selectedRange.value != 5 ? 'col-lg-4 col-md-4' : 'col-lg-3 col-md-3'" ng-if="vm.selectedRange.value == 5">
+            <span class="haserrorfieldlevel" data-ng-show="vm.dateRangeInvalid">Invalid date range. <strong>To Date</strong> must be greater than <strong>From Date</strong>.</span>
+            <span class="haserrorfieldlevel" data-ng-show="!vm.dateRangeInvalid">&nbsp;</span>
+        </div>
+        <div class="col-md-3 col-xs-6 form-group kpi-dropdown" ng-class="(vm.selectedRange.value == 5) ? 'col-lg-offset-2':''" ng-show="vm.agent.isSuperUser">
+            <label class="sr-only" for="selectedAgent">Select Agent</label>
+            <select class="form-control"
+                    name="selectedAgent"
+                    data-ng-model="vm.selectedAgent"
+                    data-ng-options="agent.agentName for agent in vm.agents track by agent.agentId"
+                    data-ng-change="vm.getAgentMetrics()">
+                <option value="">Select Agent</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="row hidden-md hidden-lg">
+        <div class="col-xs-6 form-group kpi-dropdown" ng-show="vm.selectedRange.value == 5">
+            <label for="fromDate2" class="sr-only">From Date</label>
+            <div class="input-group">
+                <input type="text"
+                       name="fromDate2"
+                       placeholder="From"
+                       data-datepicker-popup="MM/dd/yyyy"
+                       data-date-picker
+                       data-ng-model="vm.dateFilter.fromDate"
+                       class="form-control"
+                       data-is-open="vm.dateFilter.fromDateDatePicker"
+                       data-min-date="vm.minDate"
+                       ng-required="true"
+                       data-close-text="Close" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, vm.dateFilter, 'fromDateDatePicker')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+
+        <div class="col-xs-6 form-group kpi-dropdown" ng-show="vm.selectedRange.value == 5">
+            <label for="toDate2" class="sr-only">To Date</label>
+            <div class="input-group">
+                <input type="text"
+                       name="toDate2"
+                       placeholder="To"
+                       data-datepicker-popup="MM/dd/yyyy"
+                       data-date-picker
+                       data-ng-model="vm.dateFilter.toDate"
+                       class="form-control"
+                       data-is-open="vm.dateFilter.toDateDatePicker"
+                       data-min-date="vm.minDate"
+                       ng-required="true"
+                       data-close-text="Close" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, vm.dateFilter, 'toDateDatePicker')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 kpi-dropdown" ng-show="vm.selectedRange.value == 5">
+            <span class="haserrorfieldlevel" data-ng-show="vm.dateRangeInvalid">Invalid date range. <strong>To Date</strong> must be greater than <strong>From Date</strong>.</span>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <h4>{{vm.message}}</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6 col-md-3 placeholders-container">
+            <div class="thumbnail placeholders ytd">
+                <span ng-show="vm.ytd != null && !vm.loading" class="kpi-section-data">{{vm.ytd | currency}}</span>
+                <span ng-show="!vm.ytd && !vm.loading" class="kpi-section-data-unavailable">Data Unavailable</span>
+                <span class="kpi-section-data" ng-show="vm.loading"><i class="fa fa-spinner fa-spin fa-pulse"></i></span>
+                <span class="kpi-section">Sales</span>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-3 placeholders-container" ng-if="vm.agent.showCommission || vm.agent.isSuperUser">
+            <div class="thumbnail placeholders ytd">
+                <span ng-show="vm.commission != null && !vm.loading" class="kpi-section-data">{{ vm.commission | currency}}</span>
+                <span ng-show="!vm.commission && !vm.loading" class="kpi-section-data">Unavailable</span>
+                <span class="kpi-section-data" ng-show="vm.loading"><i class="fa fa-spinner fa-spin fa-pulse"></i></span>
+                <span class="kpi-section">Commission</span>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-3 placeholders-container">
+            <a ui-sref="policiesFilter" class="thumbnail placeholders">
+                <span ng-show="vm.policiesSold != null && !vm.loading" class="kpi-section-data">{{ vm.policiesSold | number }}</span>
+                <span ng-show="vm.policiesSold==null && !vm.loading" class="kpi-section-data">Unavailable</span>
+                <span class="kpi-section-data" ng-show="vm.loading"><i class="fa fa-spinner fa-spin fa-pulse"></i></span>
+                <span class="kpi-section">Policies Sold</span>
+            </a>
+        </div>
+        <div class="col-xs-6 col-md-3 placeholders-container">
+            <a ui-sref="quotes" class="thumbnail placeholders">
+                <span ng-show="vm.quotes != null && !vm.loading" class="kpi-section-data">{{ vm.quotes | number}}</span>
+                <span ng-show="!vm.quotes && !vm.loading" class="kpi-section-data">Unavailable</span>
+                <span class="kpi-section-data" ng-show="vm.loading"><i class="fa fa-spinner fa-spin fa-pulse"></i></span>
+                <span class="kpi-section">Quotes</span>
+            </a>
+        </div>
+    </div>
+    <br />
+    <hr />
+</section>

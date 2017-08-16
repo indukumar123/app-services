@@ -1,0 +1,17 @@
+﻿<div class="panel-primary" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header modal-heading">
+        <button type="button" class="close" aria-hidden="true" data-ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">Error During Save</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <i class="fa fa-exclamation-triangle text-danger"></i>
+                <span>There was an error while trying to save your batch. Please review your changes before closing.</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" id="btn_save_error_ok" class="btn btn-lg btn-primary" data-ng-click="ok()">OK</button>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿<div class="row">
+    <div class="col-md-8">
+        <payment-i-frame class="iframe-height" storage-prefix="exactcare" state="vm.state" callback="vm.purchaseQuote" errors="vm.purchaseErrors" ng-if="vm.state.packageName && vm.currentStep.code == 'purchase'"></payment-i-frame>
+        <div class="row" ng-if="!vm.currentAgent.isAmbassador">
+            <div class="form-group col-xs-4 col-sm-3">
+                <label>Agent ID</label>
+                <input type="text" data-ng-model="vm.state.policy.agentCode" disabled />
+            </div>
+        </div>
+        <div class="row" ng-if="vm.currentAgent.isAmbassador">
+            <credit-Agent agent-code="{{vm.state.policy.agentCode}}" is-ambassador="{{vm.currentAgent.isAmbassador}}" on-agent-updated="vm.onAgentUpdated(agentCode);"></credit-Agent>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-xs-offset-1">
+        <!--<div ng-include="'app/purchase/exactcare/exactcare.price.html'"></div>-->
+        <div class="row coveragesummary">
+            <h3 class="text-center">{{vm.state.priceQuote.package.name}}</h3>
+            <div class="col-md-12 margin-bottom text-right">
+                <span class="col-md-8 col-xs-5">Base Premium:</span><span class="col-md-4 col-xs-4">{{vm.state.priceQuote.basePremium | currency}}</span>
+                <span class="col-md-8 col-xs-8">Optional Coverages:</span><span class="col-md-4 col-xs-4">{{vm.state.priceQuote.upgradePremium | currency}}</span>
+                <span class="col-md-8 col-xs-8">Fees:</span><span class="col-md-4 col-xs-4">{{vm.state.priceQuote.additionalFees | currency}}</span>
+                <span class="col-md-12 col-xs-12 dividerline"></span>
+                <span class="col-md-8 col-xs-8">TOTAL</span><span class="col-md-4 col-xs-4">{{vm.state.priceQuote.totalPrice | currency}}</span>
+            </div>
+        </div>
+        <br />
+        <div class="row coveragesummary">
+            <h3 class="text-center">Trip</h3>
+            <div class="col-md-12 margin-bottom text-right">
+                <span class="col-md-8 col-xs-8">Departure Date:</span><span class="col-md-4 col-xs-4">{{vm.state.policy.departureDate | date:'MM/dd/yyyy'}}</span>
+                <span class="col-md-8 col-xs-8">Return Date:</span><span class="col-md-4 col-xs-4">{{vm.state.policy.returnDate | date:'MM/dd/yyyy'}}</span>
+                <span class="col-md-8 col-xs-8">Trip Cost:</span><span class="col-md-4 col-xs-4">{{vm.state.policy.TotalTripCost | currency}}</span>
+            </div>
+        </div>
+    </div>
+</div>

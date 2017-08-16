@@ -1,0 +1,19 @@
+﻿<div class="modal fade" id="{{modalId}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="margin-top:40%">
+            <div class="modal-header modal-heading">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{title}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="btn-group" id="mode-group" data-toggle="buttons">
+                    {{message}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-lg btn-default btn-cust" data-dismiss="modal">{{no}}</button>
+                <button type="button" class="btn btn-lg btn-default btn-cust-sec" data-dismiss="modal" data-ng-click="action({agentIds: agentIds})">{{yes}}</button>
+            </div>
+        </div>
+    </div>
+</div>

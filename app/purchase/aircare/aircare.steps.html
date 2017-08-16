@@ -1,0 +1,19 @@
+﻿<div ng-show="vm.step > 0 && vm.step <= 4" class="row page-header">
+    <div class="col-md-6 col-sm-6"><h2>AirCare <span style="font-size:18px;">{{vm.state.subTitle}}</span></h2></div>
+    <div class="col-md-6 col-sm-6 edit-action-btn">
+        <ul class="nav nav-pills pull-right">
+            <li class="{{vm.step == vm.tabs.aircare.travelers ? 'active' : ''}}">
+                <a href="#" ng-click="vm.jump(stepForm, vm.tabs.aircare.travelers)"><span class="steps">Step 1</span>Travelers</a>
+            </li>
+            <li class="{{vm.step == vm.tabs.aircare.flights ? 'active' : ''}}">
+                <a href="#" ng-click="vm.jump(stepForm, vm.tabs.aircare.flights)"><span class="steps">Step 2</span>Flights</a>
+            </li>
+            <li class="{{vm.step == vm.tabs.aircare.address ? 'active' : ''}}">
+                <a href="#" ng-click="vm.jump(stepForm, vm.tabs.aircare.address)"><span class="steps">Step 3</span>Address</a>
+            </li>
+            <li class="{{vm.step == vm.tabs.aircare.purchase? 'active' : ''}}">
+                <a href="#" ng-click="vm.jump(stepForm, vm.tabs.aircare.purchase)"><span class="steps">Step 4</span>Purchase</a>
+            </li>
+        </ul>
+    </div>
+</div>

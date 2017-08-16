@@ -1,0 +1,16 @@
+﻿<quick-quote-container ng-if="vm.ctaLoaded === true"
+                        (valid-quote)="vm.onValidQuote($event)" 
+                        (service-call)="vm.onServiceCall($event)" 
+                        (service-error)="vm.onServiceError($event)" 
+                        (values-changed)="vm.resetAllPackages()"
+                        (state-changed)="vm.onStateChanged($event)"
+                        (agent-code-changed)="vm.onAgentCodeChanged($event)"
+                        (temporary-quote-changed)="vm.onTempQuoteChanged($event)"
+                        [quote]="vm.state.cta" 
+                        [max-travelers]="vm.state.packageStateConfig.maxTravelers" 
+                        [show-flight-segments]="true" 
+                        [agent-guide]="$root.config.CLIENT_AGENT_GUIDE" 
+                        [agent-portal-guide]="$root.config.CLIENT_GUIDE_TO_AGENT" 
+                        [consumer-domain]="$root.config.CLIENT_CONSUMER_DOMAIN"
+                        [agent]="vm.agent">
+</quick-quote-container>

@@ -1,0 +1,17 @@
+﻿<section id="aircare-view" data-ng-controller="aircareController as vm">
+    <div ng-form="aircareForm">
+        <div ng-include="'app/purchase/aircare/aircare.alerts.html'"></div>
+        <div ng-include="'app/purchase/aircare/aircare.travelers.html'"></div>
+        <div ng-include="'app/purchase/aircare/aircare.flights.html'"></div>
+        <div ng-include="'app/purchase/aircare/aircare.address.html'"></div>
+        <div ng-include="'app/purchase/aircare/aircare.payment.html'"></div>
+        <div ng-include="'app/purchase/aircare/aircare.receipt.html'"></div>
+        <!-- Coverage Display -->
+        <div data-ng-show="vm.step == vm.tabs.aircare.flights || vm.step == vm.tabs.aircare.address"
+             data-coverage-details=""
+             data-doc-url="{{vm.coveragesDisplay.docUrl}}"
+             data-coverages="vm.coveragesDisplay.coverages">
+        </div>
+        <bhtp-faq-directive packages="{{vm.packages}}" show-agent-faq="false" show-web-faq="false" display-on="false" package-id="{{vm.state.packageId}}"></bhtp-faq-directive>
+    </div>
+</section>

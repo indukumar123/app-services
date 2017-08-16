@@ -1,0 +1,45 @@
+﻿<div class="row">
+    <div class="col-xs-12">
+        <h4>Customer Details</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-5">
+        <label>Name</label>
+        <p class="field">{{vm.customer.firstName}} {{vm.customer.lastName}}</p>
+    </div>
+    <div class="col-sm-4">
+        <label>Phone Number</label>
+        <p class="field" data-ng-show="vm.customer.phoneNumbers && vm.customer.phoneNumbers.length > 0">{{vm.customer.phoneNumbers[0].phoneNumber | phoneNumber }}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-5">
+        <label>Address</label>
+        <p class="field">
+            <span>
+                {{vm.customer.address.address1}}
+            </span>
+            <span class="clearfix" data-ng-if="vm.customer.address.address2">
+                {{vm.customer.address.address2}}
+            </span>
+            <span class="clearfix">
+                {{vm.customer.address.city}}, {{vm.customer.address.stateOrProvince}} {{vm.customer.address.postalCode}}
+            </span>
+        </p>
+    </div>
+    <div class="col-sm-4">
+        <label>Email Address</label>
+        <p class="field">{{vm.customer.emailAddress}}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-5">
+        <label>Residence State</label>
+        <p class="field">{{vm.customer.address.stateOrProvince}}</p>
+    </div>
+    <div class="col-sm-4">
+        <label>Date of Birth</label>
+        <p class="field">{{vm.customer.birthDate | date : vm.dateFormat }}</p>
+    </div>
+</div>

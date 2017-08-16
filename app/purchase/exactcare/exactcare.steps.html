@@ -1,0 +1,10 @@
+﻿<div class="row page-header">
+    <div class="col-lg-4 col-md-4 col-sm-3"><h2>{{vm.state.priceQuote.package.name}}<span style="font-size:18px;"> {{vm.state.subTitle}}</span></h2></div>
+    <div class="col-lg-8 col-md-8 col-sm-9">
+        <ul class="nav nav-pills pull-right">
+            <li data-ng-repeat="step in vm.steps" data-ng-class="vm.currentStep.id == step.id ? 'active' : ''" class="step-button">
+                <a href="#" ng-click="vm.navigateToStep(step.id)"><span class="steps">Step {{step.id + 1}}</span>{{step.title}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

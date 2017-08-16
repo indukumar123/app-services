@@ -1,0 +1,73 @@
+﻿<div class="table-responsive">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>{{message}}</h4>
+        </div>
+    </div>
+    
+    <table class="table table-striped">
+        <thead data-ng-hide="gridConfig.hideHeaders">
+            <tr class="table-header">
+                <th data-ng-show="gridConfig.allowMultiSelect"><input type="checkbox" ng-click="selectAll($event)" ng-checked="isSelectedAll()" /></th>
+
+                <th data-ng-repeat="column in gridConfig.columns" data-ng-click="orderChanged(column.binding)">{{column.header}}<span ng-class="getHeaderClass(column)" style="background-position-x:right;margin-left:2px;margin-top:4px;">&nbsp;</span></th>
+
+                <th data-ng-show="gridConfig.hasActions">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-hide="rows || rows.length > 0" class="error">
+                <td colspan="12">
+                    <div class="text-center"><strong>{{ gridConfig.noDataMessage }}</strong></div>
+                </td>
+            </tr>
+            <tr class="gridItem" data-ng-repeat="row in rows">
+                <td data-ng-show="gridConfig.allowMultiSelect">
+                    <input type="checkbox" ng-checked="isSelected(row)" ng-click="updateSelection($event, row)" ng-class="getSelectedClass(row)" />
+                </td>
+                <td data-ng-repeat="column in gridConfig.columns" class="{{ getCellClass(column)}}" style="{{getCellStyle(column)}}" data-ng-click="columnClicked(row, column)">
+                    <span data-ng-if="column.href">
+                        <a href="{{hrefCompiled(column, row)}}">{{ getProperty(row, column.binding) | useFilter: column.filter: getFilterBinding(row, column) }}</a>
+                    </span>
+                    <span data-ng-if="!column.href && !column.useIcon">{{ getProperty(row, column.binding) | useFilter: column.filter: getFilterBinding(row, column) }}</span>
+                    <span data-ng-if="!column.href && column.useIcon"><i class="fa fa-{{ getProperty(row, column.binding) }}"></i></span>
+                </td>
+
+                <td data-ng-show="gridConfig.hasActions" style="width:1%; text-align:left">
+                    <div class="btn-group">
+                        <a href="#" data-toggle="dropdown" data-ng-show="gridConfig.actionList.length > 0 || (row.actions && row.actions.length > 0)">
+                            <span class="fa fa-gear"></span>
+                        </a>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li data-ng-repeat="action in gridConfig.actionList">
+                                <a data-ng-href="{{hrefCompiled(action, row)}}" data-ng-click="action.click(row)"
+                                   data-ng-disabled="action.disabled" class="action" title="{{action.title}}">
+                                    <span class="glyphicon" data-ng-class="action.icon"></span> {{action.label}}
+                                </a>
+                            </li>
+                            <li data-ng-repeat="action in row.actions">
+                                <a data-ng-href="{{hrefCompiled(action, row)}}" data-ng-click="action.click(row)"
+                                   data-ng-disabled="action.disabled" class="action" title="{{action.title}}">
+                                    <span class="glyphicon" data-ng-class="action.icon"></span> {{action.label}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="row" data-ng-show="rows.length > 0">
+    <div class="col-md-12 text-center">
+        <div data-pagination
+             data-max-size=5
+             data-items-per-page=pageSize
+             data-ng-model="currentPage"
+             data-total-items="totalRecords"
+             data-ng-change="pageChanged()"
+             data-boundary-links="true"
+             class="pagination-sm"></div>
+    </div>
+</div>

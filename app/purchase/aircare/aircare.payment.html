@@ -1,0 +1,39 @@
+﻿<ng-form name="aircarePaymentForm">
+<div ng-form="stepForm">
+    <div ng-show="vm.step === vm.tabs.aircare.purchase" ng-include="'app/purchase/aircare/aircare.steps.html'"></div>
+    <div ng-show="vm.step === vm.tabs.aircare.purchase">
+        <div class="row">
+            <div class="col-md-8">
+                <form name="paymentForm">
+                    <bhtp-license-directive warning="vm.state.warning" state="vm.state.traveler.state" package-id="vm.state.packageId" show-warning="vm.state.showWarning" can-continue="vm.canContinue" package-name="vm.state.packageName" rating-id="vm.state.ratingId"></bhtp-license-directive>
+                    <payment-i-frame class="iframe-height" storage-prefix="aircare" state="vm.state" callback="vm.purchaseQuote" errors="vm.purchaseErrors" ng-if="vm.state.packageName && vm.step === vm.tabs.aircare.purchase"></payment-i-frame>
+                    <div class="row" ng-if="!vm.currentAgent.isAmbassador">
+                        <div class="form-group col-xs-4 col-sm-3">
+                            <label>Agent ID</label>
+                            <input type="text" data-ng-model="vm.state.agentCode" disabled />
+                        </div>
+                    </div>
+                    <div class="row" ng-if="vm.currentAgent.isAmbassador">
+                        <credit-Agent agent-code="{{vm.state.agentCode}}" is-ambassador="{{vm.currentAgent.isAmbassador}}" on-agent-updated="vm.onAgentUpdated(agentCode);"></credit-Agent>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-3 col-xs-offset-1">
+                <div class="row coveragesummary">
+                    <h3 class="text-center">AirCare</h3>
+                    <div class="col-md-12 margin-bottom text-center">
+                        <div ng-show="vm.state.price!=null">
+                            <h1 class="ng-binding">${{vm.state.price}} <span class="ng-binding" style="font-size:18px;">USD</span></h1>
+                        </div>
+                        <div ng-show="vm.state.price == null">
+                            <h1 class="ng-binding"><label>Price Unavailable</label></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="vm.step === vm.tabs.aircare.purchase" ng-include="'app/purchase/aircare/aircare.prevnext.html'"></div>
+    </div>
+</div>
+</ng-form>

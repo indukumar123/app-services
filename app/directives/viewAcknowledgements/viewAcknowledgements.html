@@ -1,0 +1,5 @@
+﻿<div ng-if="vm.hasAcknowledgements()">
+    <span class="acknowledgement-link" ng-repeat="ack in vm.acknowledgements" ng-click="vm.showAcknowledgement(ack)">
+        View Missed Connection Acknowledgement
+    </span>
+</div>

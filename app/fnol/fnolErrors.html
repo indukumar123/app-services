@@ -1,0 +1,13 @@
+﻿<div class="panel">
+    <div class="modal-header signin-toppanel">
+        <h4 class="modal-title panel-title">{{errorCtrl.content.title}}</h4>
+    </div>
+    <div class="modal-body">
+        <span ng-bind="errorCtrl.content.content"></span>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-lg btn-default btn-cust-sec" ng-click="errorCtrl.ok()">
+            Cancel
+        </button>
+    </div>
+</div>

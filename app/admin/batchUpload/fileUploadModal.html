@@ -1,0 +1,31 @@
+﻿<div class="panel-primary file-upload-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header modal-heading">
+        <button type="button" class="close" aria-hidden="true" data-ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">Upload File</h4>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-warning" ng-if="error">{{error}}</div>
+        <div class="row">
+            <div class="col-md-12">
+                <form class="dropzone"
+                        method="post"
+                        enctype="multipart/form-data"
+                        ng-dropzone
+                        dropzone="dropzone"
+                        dropzone-config="dropzoneConfig"
+                        event-handlers="{ 'addedfile': dzAddedFile, 'error': dzError }">
+                    <div class="dz-message">
+                        <div>Drag and drop a file to upload</div>
+                        <div class="sub-message">(or click here to choose a file)</div>
+                        <br/>
+                        <div class="sub-message">.CSV, .XLS, and .XLSX file types allowed</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-lg  btn-cust-sec" data-ng-click="cancel()">Cancel</button>
+        <button type="button" class="btn btn-lg btn-primary btn-default" data-ng-click="upload()">Upload</button>
+    </div>
+</div>

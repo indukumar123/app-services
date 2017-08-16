@@ -1,0 +1,8 @@
+﻿<section class="policyEdit" data-ng-controller="policyEditController as vm">
+    <edit-container 
+                    [policy-number]="vm.policyNumber" 
+                    [agent]="vm.agent"
+                    (navigate-to-policy-details)="vm.navigateToPolicyDetails($event)"
+                    (edit-completed)="vm.editCompleted($event)"></edit-container>
+</section>
+<script src="/Scripts/sidebarScroll.js"></script>

@@ -1,0 +1,110 @@
+﻿<div class="fnol-summary">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>
+                Claim #{{vm.claim.claimFeatureNumber}} has been successfully created.
+            </h1>
+            <span ng-if="vm.actionsAreRequired === true">We pride ourselves on fast claim processing. Please have your customer complete the following steps so we can quickly process and pay their claim.</span>
+            <span ng-if="vm.actionsAreRequired === false">We pride ourselves on fast claim processing. If additional information or documents are needed for this claim, BHTP's Claims team will be in contact with you and/or your customer.</span>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>{{vm.claim.coverageShortName}} Claim: #{{vm.claim.claimFeatureNumber}}</h3>
+            <div class="col-sm-6">
+                <div class="row" ng-if="vm.claim.policyNumber && vm.claim.policyNumber !== null">
+                    <label>Policy #</label>
+                    <p class="field">{{vm.claim.policyNumber}}</p>
+                </div>
+                <div class="row" ng-if="vm.claim.coverageShortName && vm.claim.coverageShortName !== null">
+                    <label>Claim Type</label>
+                    <p class="field">{{vm.claim.coverageShortName}}</p>
+                </div>
+                <div class="row" ng-if="vm.claim.riskShortName && vm.claim.riskShortName !== null">
+                    <label>Cause</label>
+                    <p class="field">{{vm.claim.riskShortName}}</p>
+                </div>
+                <div class="row" ng-if="vm.claim.displayTravelerList && vm.claim.displayTravelerList !== null">
+                    <label>Affected Travelers</label>
+                    <p class="field">{{vm.claim.displayTravelerList}}</p>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row" ng-if="vm.claim.status && vm.claim.status !== null">
+                    <label>Status</label>
+                    <p class="field">{{vm.claim.status}}</p>
+                </div>
+                <div class="row" ng-if="vm.claim.flight && vm.claim.flight !== null">
+                    <label>Flight Segment</label>
+                    <p class="field">
+                        <span>{{vm.claim.flight.departureAirportCode}}</span>
+                        <span><i class="fa fa-arrow-right"></i> {{vm.claim.flight.arrivalAirportCode}}</span>
+                        <span>{{vm.claim.flight.displayDepartureDate }}</span>
+                        <span>{{vm.claim.flight.airlineName}}</span>
+                        <span>{{vm.claim.flight.flightNumber}}</span>
+                    </p>
+                </div>
+                <div class="row" ng-if="vm.claim.locationOfLoss && vm.claim.locationOfLoss !== null">
+                    <label>Location of Loss</label>
+                    <p class="field">{{vm.claim.locationOfLoss.name}}</p>
+                </div>
+                <div class="row" ng-if="vm.claim.displayDateTimeOfLoss  && vm.claim.displayDateTimeOfLoss  !== null">
+                    <label>Date of Loss</label>
+                    <p class="field">{{vm.claim.displayDateTimeOfLoss }}</p>
+                </div>
+                <div class="row" ng-if="!angular.isUndefined(vm.claim.isCruise) && vm.claim.isCruise !== null">
+                    <label>Cruise</label>
+                    <p class="field">{{vm.claim.isCruise}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row" ng-if="vm.actionsAreRequired === true">
+        <div class="col-xs-12">
+            <h3>Required Actions</h3>
+            <div class="row" style="margin-bottom:-1em;">
+                <ol class="numbered-list">
+                    <li>A claim form is required to begin the claims process. Please download the form below to forward to your customer to complete electronically</li>
+                    <li>Customers should sign in to <a href="www.bhtp.com">www.bhtp.com</a>, upload their completed claim forms and attach any other necessary documents to the claims details page. Customers may also email their completed claim form to claims@BHTP.com.</li>
+                    <li>Customers should look for a confirmation email that BHTP is processing their claim.</li>
+                </ol>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <a ng-href="{{vm.claim.claimForm.formUri}}" target="_blank" role="button" class="btn btn-lg btn-default btn-cust-sec bg-ok"><img src="/Content/images/download_icon.png" alt="Download" style="padding-right:0.15em;"> Download Claim Form</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-if="vm.actionsAreRequired === false">
+        <div class="col-xs-12">
+            <h3>Required Actions</h3>
+            <div class="row">
+                <ol class="numbered-list">
+                    <li>The customer can sign in to <a href="www.bhtp.com">www.bhtp.com</a> to quickly view the status of their claim and check if any other required documents are needed.</li>
+                    <li>The customer will receive a confirmation email that BHTP is processing their claim.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Claims Contact Info:</h3>
+            <ul class="list-inline contact-info">
+                <li><i class="fa fa-phone"></i> Toll Free: <a href="tel:8663149480"><b>866-314-9480</b></a></li>
+                <li><i class="fa fa-phone"></i> Collect: <a href="tel:7153036329"><b>715-303-9329</b></a></li>
+                <li><i class="fa fa-envelope-o"></i> <a href="mailto:claims@bhtp.com."><b>claims@BHTP.com</b></a></li>
+            </ul>
+        </div>
+    </div>
+</div>

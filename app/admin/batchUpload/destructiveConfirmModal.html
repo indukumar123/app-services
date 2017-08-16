@@ -1,0 +1,18 @@
+﻿<div class="panel-primary" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header modal-heading">
+        <button type="button" class="close" aria-hidden="true" data-ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">{{title}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <i class="fa fa-exclamation-triangle text-danger"></i>
+                <span>{{message}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-lg  btn-cust-sec" data-ng-click="cancel()">No</button>
+        <button type="button" id="btn_delete_batch_yes" class="btn btn-lg btn-primary btn-default btn-cust-del" data-ng-click="ok()" data-ng-disabled="deleting || errorMessage">Yes</button>
+    </div>
+</div>

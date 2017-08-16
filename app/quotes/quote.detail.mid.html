@@ -1,0 +1,55 @@
+﻿<div class="row">
+    <div class="col-xs-12" data-ng-show="vm.showTravelers()">
+        <h3>Travelers</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th width="40%">Name</th>
+                        <th>Date of Birth</th>
+                        <th>Primary Traveler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="passenger in vm.passengers">
+                        <td>{{passenger.firstName}} {{passenger.lastName}}</td>
+                        <td>{{passenger.birthDate | date : vm.dateFormat}}</td>
+                        <td style="padding-left:5%;"><span data-ng-show="passenger.isPrimary" class="fa fa-check-circle"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-xs-12" data-ng-show="vm.showFlights()">
+        <h3>Flights</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Airport</th>
+                        <th>Date</th>
+                        <th>Airline</th>
+                        <th>Flight Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat-start="flight in vm.flights"
+                            class="{{vm.getRowIndexClass($index)}} {{vm.getDataRowClass(flight.acknowledgements)}}">
+                        <td>{{flight.departureAirportCode}} &#8594; {{flight.arrivalAirportCode}}</td>
+                        <td>{{flight.departureDate | stripMoment:'MM/DD/YYYY'}}</td>
+                        <td>{{flight.airlineName}}({{flight.airlineCode}})</td>
+                        <td>{{flight.flightNumber}}</td>
+                    </tr>
+                    <tr ng-repeat-end
+                            ng-if="flight.acknowledgements && flight.acknowledgements.length > 0"
+                            class="view-acknowledgements {{vm.getRowIndexClass($index)}}">
+                        <td colspan="4">
+                            <view-acknowledgements acknowledgements="flight.acknowledgements">
+                            </view-acknowledgements>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

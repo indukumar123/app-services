@@ -1,0 +1,50 @@
+﻿<section data-ng-controller="manageAgentsController as vm">
+    <div>
+        <h2>{{vm.title}}</h2>
+        <div class="row filter-bar">
+            <!--<div class="col-md-1" form-group>
+                <button type="submit" class="btn btn-lg btn-cust visible-lg visible-md"
+                        data-ng-click="vm.expireAgent()"
+                        data-ng-disabled="vm.selected.length == 0">
+                    Expire
+                </button>
+            </div>-->
+            <div class="col-md-1 form-group">
+                <button id="btn_new" type="submit" class="btn btn-lg btn-cust visible-lg visible-md"
+                        data-ng-click="vm.addAgent()">
+                    Add New
+                </button>
+            </div>
+            <div class="col-md-3 col-md-offset-6 form-group">
+                <label for="search">Search</label>
+                <input type="text" class="form-control" name="search" placeholder="Search" data-ng-model="vm.searchText" data-ng-change="vm.searchChanged();">
+            </div>
+            <div class="col-md-2 form-group">
+                <label for="search">Status</label>
+                <select class="form-control"
+                        name="selectedStatus"
+                        data-ng-model="vm.filteredStatus"
+                        data-ng-change="vm.filterChanged()">
+                    <option value="">All</option>
+                    <option value="Active">Active</option>
+                    <option value="Expired">Expired</option>
+                </select>
+            </div>
+        </div>
+        <div ng-if="vm.ready">
+            <div data-bhtp-grid-directive=""
+                 data-grid-config="vm.gridConfig"
+                 data-load-data="vm.loadData()" data-custom-filters="vm.getCustomFilters()"
+                 data-search-text="vm.searchText" data-selected="[]"
+                 data-reload-data-flag="false" data-refresh-data-flag="vm.refreshDataFlag"></div>
+        </div>
+
+        <div data-superusermodalconfirmation="" data-modal-id="popupExpireAgent" data-action="vm.expireAgents(entityIds)" data-title="{{vm.modalTitle}}" data-message="{{vm.expireAgentMessage}}"
+             data-yes="{{vm.yesButtonText}}" data-no="{{vm.noButtonText}}" data-agent-ids="vm.selectedAgentIds">
+        </div>
+        <div data-superusermodalconfirmation="" data-modal-id="popupActivateAgent" data-action="vm.confirmReactivateAgents(entityIds)" data-title="{{vm.modalTitle}}" data-message="{{vm.expireAgentMessage}}"
+             data-yes="{{vm.yesButtonText}}" data-no="{{vm.noButtonText}}" data-agent-ids="vm.selectedAgentIds">
+        </div>
+
+    </div>
+</section>

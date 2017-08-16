@@ -1,0 +1,15 @@
+﻿<div class="row">
+    <form name="customerSearchForm" ng-submit="vm.getCustomerDetail(customerSearchForm.$valid)" novalidate>
+        <div class="form-group col-sm-8 col-lg-6">
+            <input type="text" id="txtcustomerDetail" name="customerDetail" class="form-control form-inline icon-placeholder" placeholder="&#xf002; Search by First Name, Last Name or Email"
+                   ng-model="vm.customerSearchText" required>
+            <span class="help-block haserrorfieldlevel" data-ng-show="vm.customerNotFound" ng-bind="vm.customerNotFoundErrorMessage"></span>
+        </div>
+        <div class="form-group col-sm-4 col-lg-3">
+            <button type="submit" class="btn btn-lg btn-cust customer-search-btn" id="btnCustomerSearch"
+                    ng-class="{ 'activebtn': customerSearchForm.$valid, 'disablebtn': customerSearchForm.$invalid }">
+                Add Traveler
+            </button>
+        </div>
+    </form>
+</div>

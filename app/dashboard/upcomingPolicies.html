@@ -1,0 +1,19 @@
+﻿<section data-ng-controller="upcomingPoliciesController as vm">
+    <div class="row">
+        <div class="col-md-4 col-sm-6"><h2>{{vm.title}}</h2></div>
+        <div class="col-md-2 col-md-offset-6 col-sm-offset-6 viewall-policies">
+            <a href="policies/">View All Policies</a>
+        </div>
+    </div>
+    <div ng-if="vm.ready">
+        <div data-bhtp-grid-directive=""
+             data-grid-config="vm.gridConfig"
+             data-load-data="vm.loadData()"
+             data-search-text="vm.searchText" data-selected="[]"
+             data-reload-data-flag="vm.reloadDataFlag"
+             data-refresh-data-flag="vm.refreshDataFlag"
+             data-only-active-flag="true">
+        </div>
+    </div>
+
+</section>

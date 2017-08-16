@@ -1,0 +1,28 @@
+﻿<div class="coverage-list">
+    <div ng-class="{'col-md-6': vm.showTwoColumns()}">
+        <h4 ng-if="vm.hideHeaders !== true">Included Coverages</h4>
+        <hr>
+        <div ng-if="vm.getExtraCoverages().length > 0">
+            <div class="bonus-wrapper">
+                <div class="bonus-text">
+                    BONUS COVERAGES
+                </div>
+                <div class="bonus-coverage" data-ng-repeat="coverage in vm.getExtraCoverages() track by $index">
+                    <coverage-display coverage="coverage" mode="vm.mode" trip-cost="vm.tripCost" last-coverage="$index === (vm.getExtraCoverages().length - 1)"></coverage-display>
+                </div>
+            </div>
+        </div>
+
+        <div data-ng-repeat="coverage in vm.getStandardCoverages() track by $index">
+            <coverage-display coverage="coverage" mode="vm.mode" trip-cost="vm.tripCost" last-coverage="false"></coverage-display>
+        </div>
+    </div>
+
+    <div ng-class="{'col-md-6': vm.showTwoColumns()}" ng-if="vm.showOptionalCoverages()">
+        <h4 ng-if="vm.hideHeaders !== true">Optional Coverages</h4>
+        <hr>
+        <div data-ng-repeat="coverage in vm.getUpgradeCoverages() track by $index">
+            <coverage-display coverage="coverage" mode="vm.mode" trip-cost="vm.tripCost" last-coverage="$index === (vm.getUpgradeCoverages().length - 1)"></coverage-display>
+        </div>
+    </div>
+</div>

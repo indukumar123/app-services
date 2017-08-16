@@ -1,0 +1,13 @@
+﻿<div class="panel-primary file-upload-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header modal-heading">
+        <button type="button" class="close" aria-hidden="true" data-ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">{{title}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-warning" ng-if="error">{{error}}</div>
+        <div class="sub-message">{{message}}</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-lg  btn-cust-sec" data-ng-click="cancel()">Cancel</button>
+        <button type="button" class="btn btn-lg btn-primary btn-default" data-ng-click="ok()">Download</button>
+    </div>
+</div>

@@ -1,0 +1,139 @@
+﻿<ng-form name="flightDetailsForm">
+    <div ng-form="stepForm">
+        <div ng-show="vm.step === vm.tabs.aircare.flights || vm.step === 6">
+            <div ng-show="vm.step === vm.tabs.aircare.flights" ng-include="'app/purchase/aircare/aircare.steps.html'"></div>
+
+            <div class="row" ng-show="vm.step === 6">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="table-header">
+                                <th><h4>Flights Information</h4></th>
+                                <th>
+                                    <button type="button" class="btn btn-default active pull-right" role="button" ng-click="vm.jumpUnconditionally(2)">
+                                        <div class="glyphicon glyphicon-plus-sign">&nbsp;Edit Flights Information</div>
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div ng-if="vm.step === vm.tabs.aircare.flights" class="row">
+                <bhtp-license-directive warning="vm.state.warning" state="vm.state.traveler.state" package-id="vm.state.packageId" show-warning="vm.state.showWarning" can-continue="vm.canContinue" package-name="vm.state.packageName" rating-id="vm.state.ratingId"></bhtp-license-directive>
+            </div>
+
+            <div class="col-lg-9 col-md-9 col-sm-8">
+                <div id="flight-labels" class="row">
+                    <div class="form-group col-lg-3 visible-lg"><label>Flight Date</label></div>
+                    <div class="form-group col-lg-3 visible-lg"><label>Airline</label></div>
+                    <div class="form-group col-lg-2 visible-lg"><label>Flight Number</label></div>
+                    <div class="form-group col-lg-4 visible-lg"><label>Departure Airport <span class="fa fa-long-arrow-right"></span> Arrival Airport</label></div>
+                </div>
+                <div id="flight-form" ng-repeat="flight in vm.state.flights">
+                    <div class="row">
+                        <ng-form name="flightForm">
+                            <div class="form-group col-lg-3 col-md-6 col-sm-6">
+                                <div class="input-group">
+                                    <input type="text"
+                                           name="flightDate"
+                                           ng-disabled="vm.readonly"
+                                           data-valid-departure-date
+                                           data-datepicker-popup="MM/dd/yyyy"
+                                           data-date-picker
+                                           ng-model="flight.flightDate"
+                                           class="form-control"
+                                           data-is-open="flight.flightDateDatePicker"
+                                           data-min-date="minDate"
+                                           ng-required="true"
+                                           ng-change="flightForm.flightDate.$valid && vm.validateFlight($index, flightForm.flightDate.$pristine)"
+                                           data-close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" 
+                                                ng-disabled="vm.readonly"
+                                                ng-click="vm.openDatePicker($event, $index, 'flightDateDatePicker')">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span class="haserrorfieldlevel" data-ng-show="flightForm.flightDate.$error.required && flightForm.flightDate.$touched" ng-bind="vm.errors.flight.date.req"></span>
+                                <span class="haserrorfieldlevel" data-ng-show="flightForm.flightDate.$error.invalid && flightForm.flightDate.$touched" ng-bind="vm.errors.flight.date.valid"></span>
+                                <span class="haserrorfieldlevel" data-ng-show="flightForm.flightDate.$dirty && flightForm.flightDate.$invalid-date">Date format is incorrect</span>
+                                <span ng-show="flight.invalid && flightForm.flightDate.$touched" class="haserrorfieldlevel" ng-bind="vm.errors.flight.notFound"></span>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-6">
+                                <div ng-show="{{!vm.readonly}}">
+                                    <input name="airline" type="text" required class="form-control" placeholder="Airline" data-ng-model="vm.state.flights[$index].airline.displayName" data-airline-autocomplete="" data-airline="vm.state.flights[$index].airline" ng-blur="flightForm.flightDate.$valid && vm.validateFlight($index, flightForm.airline.$pristine)" />
+                                    <span data-ng-show="flightForm.airline.$invalid && flightForm.airline.$touched">
+                                        <span class="haserrorfieldlevel" data-ng-show="flightForm.airline.$error.required" ng-bind="vm.errors.flight.airline.req"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-2 col-md-6 col-sm-6">
+                                <input ng-disabled="vm.readonly" name="flightNumber"
+                                       required type="text"
+                                       class="form-control"
+                                       placeholder="Flight Number"
+                                       ng-model="vm.state.flights[$index].flightNumber"
+                                       ng-change="flightForm.flightDate.$valid && vm.validateFlight($index, flightForm.flightNumber.$pristine)" />
+                                <span class="haserrorfieldlevel" data-ng-show="flightForm.flightNumber.$error.required && flightForm.flightNumber.$touched" ng-bind="vm.errors.flight.number.req"></span>
+                                <span class="haserrorfieldlevel" data-ng-show="flightForm.flightNumber.$error.number && flightForm.flightNumber.$touched" ng-bind="vm.errors.flight.number.format"></span>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-6">
+                                <select ng-show="{{!vm.readonly}}"
+                                        required 
+                                        class="form-control"
+                                        id="flightInfo" name="flightInfo"
+                                        ng-disabled="vm.state.flights[$index].flightInfoOptions.length==0"
+                                        ng-change="vm.flightDataChanged(flight);"
+                                        ng-model="vm.state.flights[$index].flightInfo"
+                                        ng-options="option as option.displayName for option in vm.state.flights[$index].flightInfoOptions track by option.displayName"></select>
+                                <input ng-disabled="true" ng-show="{{vm.readonly}}" name="flightInfo" 
+                                        required type="text" 
+                                        class="form-control" 
+                                        placeholder="Flight" 
+                                        ng-model="flight.flightInfo.displayName" />
+                            </div>
+                            <div class="form-group col-lg-1 col-md-1 col-sm-1">
+                                <a ng-show="$index > 0" href="#" ng-disabled="vm.readonly" ng-click="vm.removeFlight($index)"><span class="fa fa-trash-o fa-2x icon-align-grid"></span></a>
+                            </div>
+                        </ng-form>
+                        <view-acknowledgements class="after-form" 
+                                               acknowledgements="flight.acknowledgements"
+                                               ng-if="flight.acknowledgements && flight.acknowledgements.length > 0">
+                        </view-acknowledgements>
+                    </div>
+                </div><!--//repeater-->
+                <div class="row">
+                    <div class="col-md-12" data-ng-show="vm.state.flights.length < vm.maxMultiFlights">
+                        <a href="#" ng-show="{{!vm.readonly}}" ng-disabled="vm.state.flights.length == 5 || vm.readonly" ng-click="vm.addFlight()">
+                            <span class="fa fa-plus-circle icon-align-text"></span> <span>Add Flight</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p data-ng-show="vm.state.flights.length < vm.maxMultiFlights - 1">You can add {{vm.maxMultiFlights - (vm.state.flights.length)}} more flights.</p>
+                        <p data-ng-show="vm.state.flights.length == vm.maxMultiFlights -1">You can add {{vm.maxMultiFlights - (vm.state.flights.length)}} more flight.</p>
+                        <p data-ng-show="vm.state.flights.length == (vm.maxMultiFlights)">You have reached the maximum of {{vm.maxMultiFlights}} flight segments for a policy.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-4">
+                <div class="row coveragesummary">
+                    <h3 class="text-center">AirCare</h3>
+                    <div class="col-md-12 margin-bottom text-center">
+                        <div ng-show="vm.state.price!=null">
+                            <h1 class="ng-binding">${{vm.state.price}} <span class="ng-binding" style="font-size:18px;">USD</span></h1>
+                        </div>
+                        <div ng-show="vm.state.price == null">
+                            <h1 class="ng-binding"><label>Price Unavailable</label></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="vm.step === vm.tabs.aircare.flights" ng-include="'app/purchase/aircare/aircare.prevnext.html'"></div>
+        </div>
+    </div>
+</ng-form>

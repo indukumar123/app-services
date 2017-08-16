@@ -1,0 +1,408 @@
+﻿<section id="policyTrip" class="policyEdit">
+    <div class="well module-header">
+        <a class="toggle-container" href="javascript:void(0)" style="text-decoration:none; color:#898989;" data-ng-click="vm.state.container.tripExpanded = !vm.state.container.tripExpanded">
+            <div class="row">
+                <div class="col-xs-10">
+                    <h3>Trip</h3>
+                </div>
+                <div class="col-xs-2">
+                    <i class="fa fa-2x pull-right fa-minus-square" data-ng-show="vm.state.container.tripExpanded"></i>
+                    <i class="fa fa-2x pull-right fa-plus-square" data-ng-show="!vm.state.container.tripExpanded"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="well module-content" data-ng-show="vm.state.container.tripExpanded">
+
+        <div class="flight-form" ng-if="vm.isAirCare()" ng-form="flightsForm">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4 style="display:inline-block;">Flight Builder</h4>
+                    <a ng-href="{{$root.config.CLIENT_CONSUMER_DOMAIN}}/a/blocklists" style="padding-left:15px; font-size:12px;" target="_blank">View Blocked Providers&nbsp;<span class="fa fa-external-link icon-align-text" style="font-size:18px;"></span></a><br />
+                </div>
+            </div>
+            <div class="row visible-lg">
+                <div class="form-group col-lg-3">
+                    <label>Flight Date</label>
+                </div>
+                <div class="form-group col-lg-3">
+                    <label>Airline</label>
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Flight #</label>
+                </div>
+                <div class="form-group col-lg-3">
+                    <label>
+                        Departure <span class="fa fa-long-arrow-right"></span> Arrival
+                    </label>
+                </div>
+                <div class="form-group col-lg-1"></div>
+            </div>
+            <ng-form name="subFlightsForm" data-ng-repeat="flight in vm.state.quote.flights">
+                <div class="row flight-row">
+                    <div class="form-group col-xs-11 col-sm-5 col-lg-3 ">
+                        <label class="hidden-lg" for="flightDate">Flight Date</label>
+                        <div class="input-group">
+                            <input type="text"
+                                   name="flightDate"
+                                   data-valid-departure-date
+                                   data-datepicker-popup="MM/dd/yyyy"
+                                   data-date-picker
+                                   ng-model="flight.departureDate"
+                                   class="form-control"
+                                   data-is-open="flight.departureDatePicker"
+                                   data-min-date="minDate"
+                                   ng-required="true"
+                                   ng-change="subFlightsForm.$valid && vm.validateFlight($index, subFlightsForm.flightDate.$pristine)"
+                                   data-close-text="Close" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="vm.openArrayDatePicker($event, $index, 'departureDatePicker')"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
+                        <span class="haserrorfieldlevel" data-ng-show="subFlightsForm.flightDate.$error.required && subFlightsForm.flightDate.$touched" ng-bind="vm.errors.flight.date.req"></span>
+                        <span class="haserrorfieldlevel" data-ng-show="subFlightsForm.flightDate.$error.invalid && subFlightsForm.flightDate.$touched" ng-bind="vm.errors.flight.date.valid"></span>
+                        <span ng-show="vm.state.quote.flights[$index].invalid && subFlightsForm.flightDate.$error.invalid && subFlightsForm.flightDate.$touched" class="haserrorfieldlevel" ng-bind="vm.errors.flight.notFound"></span>
+                    </div>
+                    <div class="form-group col-xs-11 col-sm-6 col-lg-3">
+                        <label class="hidden-lg" for="airline">Airline</label>
+                        <div>
+                            <input name="airline"
+                                   id="airline{{$index}}"
+                                   required
+                                   type="text"
+                                   class="form-control"
+                                   placeholder="Airline"
+                                   data-ng-model="flight.airline.displayName"
+                                   data-airline-autocomplete=""
+                                   data-airline="flight.airline"
+                                   ng-change="subFlightsForm.$valid && vm.validateFlightAfterAirlineChange($index, subFlightsForm.airline.$pristine)" />
+                            <span class="haserrorfieldlevel" data-ng-show="subFlightsForm.airline.$error.required && subFlightsForm.airline.$touched" ng-bind="vm.errors.flight.airline.req"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-11 col-sm-5 col-lg-2 flight-number">
+                        <label class="hidden-lg" for="flightNumber">Flight #</label>
+                        <input name="flightNumber"
+                               id="flightNumber{{$index}}"
+                               required type="text"
+                               class="form-control"
+                               placeholder="Flight #"
+                               data-ng-model="flight.flightNumber"
+                               ng-change="subFlightsForm.flightDate.$valid && vm.validateFlight($index, subFlightsForm.flightNumber.$pristine)" />
+                        <span class="haserrorfieldlevel" data-ng-show="subFlightsForm.flightNumber.$error.required && subFlightsForm.flightNumber.$touched" ng-bind="vm.errors.flight.number.req"></span>
+                        <span class="haserrorfieldlevel" data-ng-show="subFlightsForm.flightNumber.$error.number && subFlightsForm.flightNumber.$touched" ng-bind="vm.errors.flight.number.format"></span>
+                    </div>
+                    <div class="form-group col-xs-11 col-sm-6 col-lg-3">
+                        <label class="hidden-lg" for="flightInfo">Departure <span class="fa fa-long-arrow-right"></span> Arrival</label>
+                        <select required class="form-control" id="flightInfo" name="flightInfo" 
+                                ng-model="flight.flightInfo" 
+                                ng-options="option as option.displayName for option in flight.flightInfoOptions track by option.displayName" 
+                                ng-change="vm.selectFlight(flight) && vm.flightDataChanged(flight)" 
+                                ng-disabled="flight.flightInfoOptions.length === 0"></select>
+                    </div>
+                    <div class="remove-col form-group col-xs-1">
+                        <a href="#" ng-click="vm.removeFlight($index)"><span class="fa fa-trash-o fa-2x icon-align-grid remove-button"></span></a>
+                    </div>
+                    <view-acknowledgements class="after-form col-xs-12"
+                                           acknowledgements="flight.acknowledgements"
+                                           ng-if="flight.acknowledgements && flight.acknowledgements.length > 0">
+                    </view-acknowledgements>
+                </div>
+            </ng-form> <!--//repeater-->
+
+           
+            <div class="row">
+                <div class="col-xs-12" data-ng-show="vm.state.quote.flights.length < vm.maxMultiFlights">
+                    <a href="#" ng-disabled="vm.state.quote.flights.length == 4" ng-click="vm.addFlight()">
+                        <span class="fa fa-plus-circle icon-align-text"></span>&nbsp;Add Flight
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 flight-counter">
+                    <p data-ng-show="vm.state.quote.flights.length < vm.maxMultiFlights - 1">You can add {{vm.maxMultiFlights - (vm.state.quote.flights.length)}} more flights.</p>
+                    <p data-ng-show="vm.state.quote.flights.length == vm.maxMultiFlights -1">You can add {{vm.maxMultiFlights - (vm.state.quote.flights.length)}} more flight.</p>
+                    <p data-ng-show="vm.state.quote.flights.length == (vm.maxMultiFlights)">You have reached the maximum of {{vm.maxMultiFlights}} flight segments for a policy.</p>
+                </div>
+            </div>
+        </div>
+        <div class="border-light" ng-if="vm.isExactCare()" ng-form="tripForm">
+            <div class="row">
+                <div class="form-group col-sm-6 col-lg-4">
+                    <label for="departureDate">Departure Date</label>
+                    <div class="input-group">
+                        <input type="text"
+                               name="departureDate"
+                               id="departureDate"
+                               class="form-control"
+                               placeholder="Departure Date"
+                               data-ng-model="vm.state.quote.policy.departureDate"
+                               data-ng-keypress="vm.notifyEditingRatingField()"
+                               data-ng-change="vm.onDepartureDateChanged(); vm.onLeaveRatingField();"
+                               data-datepicker-popup="MM/dd/yyyy"
+                               data-date-picker
+                               data-is-open="vm.focusDepartureDate"
+                               data-ng-disabled="vm.state.rules.policy.edit.departureDate == false"
+                               data-ng-required="vm.state.rules.policy.req.departureDate == true"
+                               data-valid-date-after="vm.validDepartureDate"
+                               data-valid-date-before="vm.state.quote.policy.returnDate" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="vm.openDatePicker($event, vm, 'focusDepartureDate', 'focusReturnDate')">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <div data-ng-show="tripForm.departureDate.$invalid && tripForm.departureDate.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="tripForm.departureDate.$error.required" ng-bind="vm.errors.trip.departure.req"></span>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="tripForm.departureDate.$error.dateAfter" ng-bind="vm.errors.trip.departure.min"></span>
+                    </div>
+                    <div data-ng-show="tripForm.departureDate.$touched || tripForm.returnDate.$touched">
+                        <span class="help-block haserrorfieldlevel"
+                              data-ng-show="tripForm.departureDate.$error.dateBefore || tripForm.returnDate.$error.dateAfter"
+                              ng-bind="vm.errors.trip.departure.max">
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6 col-lg-4">
+                    <label for="returnDate">Return Date</label>
+                    <div class="input-group">
+                        <input type="text"
+                               name="returnDate"
+                               id="returnDate"
+                               class="form-control"
+                               placeholder="Return Date"
+                               data-ng-model="vm.state.quote.policy.returnDate"
+                               data-datepicker-popup="MM/dd/yyyy"
+                               data-date-picker
+                               data-is-open="vm.focusReturnDate"
+                               data-ng-keypress="vm.notifyEditingRatingField()"
+                               data-ng-change="vm.onReturnDateChanged(); vm.onLeaveRatingField();"
+                               data-ng-required="vm.state.rules.policy.req.returnDate == true"
+                               data-valid-date-after="vm.state.quote.policy.departureDate"
+                               data-ng-disabled="vm.state.rules.policy.edit.returnDate == false"
+                               data-departure-date="vm.state.quote.policy.departureDate"
+                               data-max-trip-length="vm.state.packageStateConfig.maximumTripLength"
+                               data-min-trip-length="vm.state.packageStateConfig.minimumTripLength"
+                               data-valid-trip-length />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="vm.openDatePicker($event, vm, 'focusReturnDate', 'focusDepartureDate')">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <div data-ng-show="tripForm.returnDate.$invalid && tripForm.returnDate.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="tripForm.returnDate.$error.required" ng-bind="vm.errors.trip.returnDate.req"></span>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="tripForm.returnDate.$error.tripLengthMin" ng-bind="vm.errors.trip.returnDate.tripLengthMin"></span>
+                        <span class="help-block haserrorfieldlevel" data-ng-show="tripForm.returnDate.$error.tripLengthMax" ng-bind="vm.errors.trip.returnDate.tripLengthMax"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4 style="display:inline-block;">Destination</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-5">
+                    <label for="destinationCountry">Country</label>
+                    <input name="destinationCountry"
+                           id="destinationCountry"
+                           class="form-control"
+                           autocomplete="off"
+                           spellcheck="false"
+                           placeholder="Country"
+                           data-ng-required="vm.state.rules.policy.req.destinationCountry == true"
+                           data-ng-model="vm.state.quote.policy.destinationCountry"
+                           data-ng-keypress="vm.notifyEditingRatingField()"
+                           data-disallow-free-form="true"
+                           data-bhtp-auto-complete="{{vm.state.lookup.dataUrl.country}}"
+                           data-entity="vm.state.quote.policy.destinationCountryEntity"
+                           data-display-key="name"
+                           data-id-key="salesForceId"
+                           data-ng-disabled="vm.state.rules.policy.edit.destinationCountry == false"
+                           data-ng-change="vm.onLeaveRatingField()" />
+                    <div data-ng-show="tripForm.destinationCountry.$invalid && tripForm.destinationCountry.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="tripForm.destinationCountry.$error.required" ng-bind="vm.errors.trip.country.req"></span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-4" data-ng-hide="!vm.isDestinationStateRequired()">
+                    <label for="destinationState">Destination State</label>
+                    <select name="destinationState"
+                            id="destinationState"
+                            class="form-control"
+                            data-ng-keypress="vm.notifyEditingNonRatingSelect()"
+                            data-ng-focus="vm.notifyEditingNonRatingSelect()"
+                            data-ng-blur="vm.onLeaveNonRatingSelect()"
+                            data-ng-model="vm.state.quote.policy.destinationState"
+                            data-ng-disabled="vm.state.rules.policy.edit.destinationState == false"
+                            data-ng-required="vm.isDestinationStateRequired() && vm.state.rules.policy.req.destinationState == true"
+                            data-ng-options="state.code as state.name for state in vm.state.lookup.states"></select>
+                    <div data-ng-show="tripForm.destinationState.$invalid && tripForm.destinationState.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="tripForm.destinationState.$error.required" ng-bind="vm.errors.trip.state.req"></span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="destinationCity">City</label>
+                    <input name="destinationCity"
+                           id="destinationCity"
+                           class="form-control"
+                           placeholder="{{vm.optionalText}}"
+                           data-ng-model="vm.state.quote.policy.destinationCity"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-ng-disabled="vm.state.rules.policy.edit.destinationCity == false"
+                           data-ng-required="vm.state.rules.policy.req.destinationCity == true" />
+                    <div data-ng-show="tripForm.destinationCity.$invalid && tripForm.destinationCity.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="tripForm.destinationCity.$error.required" ng-bind="vm.errors.trip.city.req"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-light" ng-if="vm.isExactCare()" ng-form="suppliersForm">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4 style="display:inline-block;">Trip Suppliers</h4>
+                    <a ng-href="{{$root.config.CLIENT_CONSUMER_DOMAIN}}/a/blocklists" style="padding-left:15px; font-size:12px;" target="_blank">View Blocked Providers &nbsp;<span class="fa fa-external-link icon-align-text" style="font-size:18px;"></span></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="airline">Airline</label>
+                    <div class="checkbox-inline pull-right">
+                        <label class="label-cutm" for="chkNoAirline">
+                            <input type="checkbox"
+                                   name="chkNoAirline"
+                                   id="chkNoAirline"
+                                   data-ng-model="vm.state.quote.policy.airlineNotProvided"
+                                   data-ng-disabled="vm.state.rules.policy.edit.airline == false"
+                                   data-ng-change="vm.clearAirlineInputOnChange()" />No airline
+                        </label>
+                    </div>
+                    <input name="airline"
+                           id="airline"
+                           class="form-control"
+                           autocomplete="off"
+                           spellcheck="false"
+                           placeholder="Airline"
+                           ng-required="!vm.state.quote.policy.airlineNotProvided"
+                           data-ng-model="vm.state.quote.policy.airline"
+                           data-ng-keyup="vm.setNoAirlineFalseOnAirlineEdit()"
+                           data-disallow-free-form="true"
+                           data-bhtp-auto-complete="{{vm.state.lookup.dataUrl.airline}}"
+                           data-entity="vm.state.quote.policy.airlineEntity"
+                           data-display-key="name"
+                           data-id-key="salesForceId"
+                           data-ng-disabled="vm.state.rules.policy.edit.airline == false"
+                           data-ng-blur="vm.checkAirline()" />
+                    <div data-ng-show="suppliersForm.airline.$invalid && suppliersForm.airline.$touched">
+                        <span class="help-block haserrorfieldlevel"
+                              data-ng-show="suppliersForm.airline.$error.required || suppliersForm.airline.$error.invalid" ng-bind="vm.errors.provider.airline.req"></span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="hotel">Hotel</label>
+                    <input name="hotel"
+                           id="hotel"
+                           class="form-control"
+                           placeholder="{{vm.optionalText}}"
+                           autocomplete="off"
+                           spellcheck="false"
+                           data-bhtp-auto-complete="{{vm.state.lookup.dataUrl.hotel}}"
+                           data-entity="vm.state.quote.policy.hotelEntity"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-display-key="name"
+                           data-id-key="salesForceId"
+                           data-ng-disabled="vm.state.rules.policy.edit.hotel == false"
+                           data-ng-model="vm.state.quote.policy.hotel"
+                           data-ng-required="vm.state.rules.policy.req.hotel == true" />
+                    <span data-ng-show="suppliersForm.hotel.$invalid && suppliersForm.hotel.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="suppliersForm.hotel.$error.required" ng-bind="vm.errors.provider.hotel.req"></span>
+                    </span>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="carRentalCompany">Car Rental Company</label>
+                    <input name="carRentalCompany"
+                           id="carRentalCompany"
+                           class="form-control"
+                           autocomplete="off"
+                           spellcheck="false"
+                           placeholder="{{ vm.optionalText }}"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-ng-model="vm.state.quote.policy.carRentalCompany"
+                           data-bhtp-auto-complete="{{vm.state.lookup.dataUrl.carRentalCompany}}"
+                           data-entity="vm.state.quote.policy.carRentalCompanyEntity"
+                           data-display-key="name"
+                           data-id-key="salesForceId"
+                           data-ng-disabled="vm.state.rules.policy.edit.carRentalCompany == false" />
+                    <div data-ng-show="suppliersForm.carRentalCompany.$invalid && suppliersForm.carRentalCompany.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="suppliersForm.carRentalCompany.$error.required" ng-bind="vm.errors.provider.carRental.req"></span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="cruiseLine">Cruise Line</label>
+                    <input name="cruiseLine"
+                           id="cruiseLine"
+                           class="form-control"
+                           placeholder="{{vm.optionalText}}"
+                           autocomplete="off"
+                           spellcheck="false"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-bhtp-auto-complete="{{vm.state.lookup.dataUrl.cruiseLine}}"
+                           data-entity="vm.state.quote.policy.cruiseLineEntity"
+                           data-display-key="name"
+                           data-id-key="salesForceId"
+                           data-ng-disabled="vm.state.rules.policy.edit.cruiseLine == false"
+                           data-ng-model="vm.state.quote.policy.cruiseLine"
+                           data-ng-required="vm.state.rules.policy.req.cruiseLine == true" />
+                    <span data-ng-show="suppliersForm.cruiseLine.$invalid && suppliersForm.cruiseLine.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="suppliersForm.cruiseLine.$error.required" ng-bind="vm.errors.provider.cruiseLine.req"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="rentalCompany">Other Rental Company</label>
+                    <input name="rentalCompany"
+                           id="rentalCompany"
+                           class="form-control"
+                           placeholder="{{vm.optionalText}}"
+                           autocomplete="off"
+                           spellcheck="false"
+                           data-bhtp-auto-complete="{{vm.state.lookup.dataUrl.rentalCompany}}"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-entity="vm.state.quote.policy.rentalCompanyEntity"
+                           data-display-key="name"
+                           data-id-key="salesForceId"
+                           data-ng-disabled="vm.state.rules.policy.edit.rentalCompany == false"
+                           data-ng-model="vm.state.quote.policy.rentalCompany"
+                           data-ng-required="vm.state.rules.policy.req.rentalCompany == true" />
+                    <span data-ng-show="suppliersForm.rentalCompany.$invalid && suppliersForm.rentalCompany.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="suppliersForm.rentalCompany.$error.required" ng-bind="vm.errors.provider.otherRental.req"></span>
+                    </span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="tourOperator">Tour Operator</label>
+                    <input name="tourOperator"
+                           id="tourOperator"
+                           class="form-control"
+                           placeholder="{{vm.optionalText}}"
+                           autocomplete="off"
+                           spellcheck="false"
+                           data-bhtp-auto-complete="{{vm.state.lookup.dataUrl.tourOperator}}"
+                           data-ng-keypress="vm.notifyEditingNonRatingField()"
+                           data-entity="vm.state.quote.policy.tourOperatorEntity"
+                           data-display-key="name"
+                           data-id-key="salesForceId"
+                           data-ng-disabled="vm.state.rules.policy.edit.tourOperator == false"
+                           data-ng-model="vm.state.quote.policy.tourOperator"
+                           data-ng-required="vm.state.rules.policy.req.tourOperator == true" />
+                    <span data-ng-show="suppliersForm.tourOperator.$invalid && suppliersForm.tourOperator.$touched">
+                        <span class="help-block haserrorfieldlevel" data-ng-show="suppliersForm.tourOperator.$error.required" ng-bind="vm.errors.provider.tourOperator.req"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

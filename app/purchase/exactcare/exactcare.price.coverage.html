@@ -1,0 +1,34 @@
+﻿<div class="coverage-panel-group" id="coverage-accordion">
+    <div class="coverage-panel coverage-panel-default">
+        <div class="coverage-panel-heading" data-ng-click="vm.showIncludedCoverage = !vm.showIncludedCoverage">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" href="#">
+                    <i class="pull-left fa" data-ng-class="vm.showIncludedCoverage ? 'fa-arrow-down' : 'fa-arrow-right'"></i> Included Coverage
+                </a>
+            </h5>
+        </div>
+        <div data-ng-show="vm.showIncludedCoverage" class="panel-collapse collapse" data-ng-class="vm.showIncludedCoverage ? 'in' : ''">
+            <div class="panel-body">
+                <div data-ng-repeat="coverage in vm.state.coverages.included track by coverage.ratingId">
+                    <span class="fa fa-check"></span> <span class="coverage-name">{{coverage.name}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="coverage-panel coverage-panel-default">
+        <div class="coverage-panel-heading" data-ng-click="vm.showOptionalCoverage = !vm.showOptionalCoverage">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" href="#">
+                    <i class="pull-left fa" data-ng-class="vm.showOptionalCoverage ? 'fa-arrow-down' : 'fa-arrow-right'"></i> Optional Coverage
+                </a>
+            </h5>
+        </div>
+        <div data-ng-show="vm.showOptionalCoverage" class="panel-collapse collapse" data-ng-class="vm.showOptionalCoverage ? 'in' : ''">
+            <div class="panel-body">
+                <div data-ng-repeat="coverage in vm.state.coverages.optional track by coverage.ratingId">
+                    <span class="fa fa-check"></span> <span class="coverage-name">{{coverage.name}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿<h2>Banner Ads</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <p>INSTRUCTIONS:</p>
+        <p>
+            1. Select an image below and click "Get Code."
+            <br />
+            2. Copy the code to the right and paste it into the HTML of your site. To copy the code, select it with your mouse cursor then hold down the CTRL + C keys (Command + C on a Mac keys. Hold down CTRL + P to paste (Command + P on a Mac).
+        </p>
+    </div>
+
+    <div class="col-md-6">
+        <textarea class="textarea-snippet" ng-model="vm.current.htmlSnippet" readonly="readonly"></textarea>
+    </div>
+</div>
+
+<div class="borderless-table">
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>Image</th>
+                <th>Description</th>
+                <th>Dimensions</th>
+                <th>Size</th>
+                <th>Image Link</th>
+            </tr>
+            <tr ng-repeat="banner in vm.bannerAds">
+                <td class="td-bluefont"><bhtp-image-preview image-source="{{banner.imagePath}}" image-width="{{banner.width}}" image-height="{{banner.height}}" /></td>
+                <td>{{banner.description}}</td>
+                <td>{{banner.width}} x {{banner.height}}</td>
+                <td>{{banner.fileSize}}</td>
+                <td class="td-bluefont"><a class="get-code" ng-click="vm.getCode($index)">Get Code</a></td>
+            </tr>
+        </table>
+    </div>
+</div>

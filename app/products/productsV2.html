@@ -1,0 +1,46 @@
+﻿<div ng-controller="productsV2Controller as vm">
+    <div ng-show="vm.packageId == null">
+        <div class="row">
+            <div class="col-xs-4 nopadding">
+                <h2>Products</h2>
+            </div>
+            <div ng-hide="vm.customerId || vm.hideState" class="col-xs-8" style="padding-top:20px;">
+                <div class="row">
+                    <div class="col-xs-1 col-xs-offset-5 col-md-offset-7 text-right nopadding" style="padding-top:5px;">
+                        <label for="state">State</label>
+                    </div>
+                    <div class="col-xs-6 col-md-4 text-right">
+                        <select class="form-control" name="state" data-ng-model="vm.state" ng-change="vm.stateChanged()" placeholder="Select State" state-select-persister>
+                            <option ng-selected="vm.state==null" style="display:none;" disabled value="">Select State</option>
+                            <option ng-repeat="state in vm.states" ng-disabled="!state.agencyCanSell" ng-selected="state.code==vm.state" value="{{state.code}}">{{state.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-xs-12 nopadding link-to-pdf ">
+                <a ng-href="{{$root.config.CLIENT_AGENT_GUIDE}}" target="_blank"><i class="fa fa-file-pdf-o"></i>&nbsp;View Agent Guide</a>
+            </div>
+            <div class="col-xs-8 text-right">
+                <a ng-href="{{$root.config.CLIENT_CONSUMER_DOMAIN}}/a/blocklists" target="_blank"><i class="fa fa-external-link-square"></i>&nbsp;View Blocked Providers</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 nopadding link-to-pdf ">
+                <a ng-href="{{$root.config.CLIENT_GUIDE_TO_AGENT}}" target="_blank"><i class="fa fa-file-pdf-o"></i> View Agent Portal Guide</a>
+            </div>
+        </div>
+        <products-table
+            data-ng-if="vm.packages"
+            packages="{{vm.packages}}"
+            customer-id="vm.customerId"></products-table>
+        <bhtp-faq-directive
+            packages="{{vm.packages}}"
+            show-agent-faq="false"
+            show-web-faq="true"
+            display-on="false"></bhtp-faq-directive>
+
+    </div>
+</div>

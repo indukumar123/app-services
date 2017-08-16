@@ -1,0 +1,138 @@
+﻿<section id="policyCoverages" class="policyEdit">
+    <div class="well module-header">
+        <a class="toggle-container" href="javascript:void(0)" style="text-decoration:none; color:#898989;" data-ng-click="vm.state.container.coveragesExpanded = !vm.state.container.coveragesExpanded">
+            <div class="row">
+                <div class="col-xs-10">
+                    <h3>Coverages</h3>
+                </div>
+                <div class="col-xs-2">
+                    <i class="fa fa-2x pull-right fa-minus-square" data-ng-show="vm.state.container.coveragesExpanded"></i>
+                    <i class="fa fa-2x pull-right fa-plus-square" data-ng-show="!vm.state.container.coveragesExpanded"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="well module-content" data-ng-show="vm.state.container.coveragesExpanded">
+        <div id="included-coverages">
+            <h4 class="border-bottom">Included</h4>
+            <div class="row coverage-item" ng-repeat="coverage in vm.state.quote.package.includedCoverages track by coverage.ratingId">
+                <span class="col-xs-8 nopadding">{{coverage.name}}</span>
+                <span class="col-xs-4 text-right nopadding">{{vm.formatCoverage(coverage)}}</span>
+                <view-acknowledgements class="col-xs-12"
+                                       acknowledgements="coverage.acknowledgements"
+                                       ng-if="coverage.acknowledgements && coverage.acknowledgements.length > 0">
+                </view-acknowledgements>
+            </div>
+        </div>
+        <div id="optional-coverages" ng-show="vm.isExactCare() && vm.state.quote.package.optionalCoverages.length > 0">
+            <h4 class="border-bottom">Optional</h4>
+            <div>
+                <div class="row coverage-item" data-ng-repeat="coverage in vm.state.quote.package.optionalCoverages track by coverage.ratingId">
+                    <div class="col-xs-12 nopadding">
+                        <input type="checkbox" 
+                               ng-checked="coverage.selected == true" 
+                               ng-change="vm.updateCoverage(coverage)" 
+                               data-ng-model="coverage.selected" 
+                               ng-disabled="coverage.canRemove == false" />&nbsp;&nbsp;
+                        <span>{{coverage.name}}</span>
+                        <a ng-if="coverage.ratingId == 'CRCC'" ng-href="{{$root.config.CLIENT_CONSUMER_DOMAIN}}/a/blocklists" style="padding-left:10px; font-size:12px;" target="_blank">(View Blocked Providers)</a>
+                        <div class="row coverage-padding" ng-if="coverage.ratingId == 'FAU'" ng-show="coverage.selected">
+                            <div class="col-sm-6 form-group">
+                                <label for="flightAccidentLimits" class="control-label">Coverage Limit</label>
+                                <select data-placement="bottom"
+                                        title="Coverage Limits"
+                                        class="form-control"
+                                        id="flightAccidentLimits"
+                                        name="flightAccidentLimits"
+                                        ng-model="coverage.coverageLimit"
+                                        ng-change="vm.updateCoverage(coverage)">
+                                    <option ng-repeat="limit in coverage.limits" value="{{limit}}" ng-selected="coverage.coverageLimit==limit">{{limit|currency}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row coverage-padding" ng-if="coverage.ratingId == 'CRCC'" ng-show="coverage.selected" ng-form="optionalCarCoverage">
+                            <div class="col-sm-4 form-group">
+                                <label for="rentalCarCompany" class="control-label">Car Rental Company</label>
+                                <input name="rentalCarCompany"
+                                       class="form-control"
+                                       id="rentalCarCompany"
+                                       placeholder="{{ vm.optionalText }}"
+                                       autocomplete="off"
+                                       spellcheck="false"
+                                       ng-change="vm.checkRentalInfoAfterCompanyChange(coverage, !optionalCarCoverage.$invalid)"
+                                       data-ng-model="vm.state.quote.policy.carRentalCompany"
+                                       data-bhtp-auto-complete="{{vm.state.lookup.dataUrl.carRentalCompany}}"
+                                       data-entity="vm.state.quote.policy.carRentalCompanyEntity"
+                                       data-display-key="name"
+                                       data-id-key="salesForceId" />
+                                <span data-ng-show="optionalCarCoverage.rentalCarCompany.$invalid && optionalCarCoverage.rentalCarCompany.$touched">
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="optionalCarCoverage.rentalCarCompany.$error.required" ng-bind="vm.errors.provider.carRental.req"></span>
+                                </span>
+                            </div>
+                            <div class="col-xs-6 col-sm-4 form-group">
+                                <label for="rentalCarPickupDate" class="control-label">Pickup Date</label>
+                                <div class="input-group">
+                                    <input type="text"
+                                           name="rentalCarPickupDate"
+                                           id="rentalCarPickupDate"
+                                           data-datepicker-popup="MM/dd/yyyy"
+                                           data-date-picker
+                                           data-ng-model="vm.state.quote.policy.rentalCarPickupDateFormatted"
+                                           class="form-control"
+                                           data-valid-date-after="vm.state.quote.policy.departureDate"
+                                           data-valid-date-before="vm.state.quote.policy.rentalCarReturnDateFormatted"
+                                           data-is-open="vm.rentalCarPickupDatePicker"
+                                           ng-required="coverage.selected"
+                                           ng-change="vm.checkRentalInfoAfterPickupDateChange(coverage, !optionalCarCoverage.$invalid)"
+                                           data-min-date="minDate"
+                                           data-close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" ng-click="vm.openDatePicker($event, vm, 'rentalCarPickupDatePicker','rentalCarReturnDatePicker')">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span data-ng-show="optionalCarCoverage.rentalCarPickupDate.$invalid && optionalCarCoverage.rentalCarPickupDate.$touched">
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="optionalCarCoverage.rentalCarPickupDate.$error.required" ng-bind="vm.errors.provider.carRental.pickup.req"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="optionalCarCoverage.rentalCarPickupDate.$error.dateBefore" ng-bind="vm.errors.provider.carRental.pickup.max"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="optionalCarCoverage.rentalCarPickupDate.$error.dateAfter" ng-bind="vm.errors.provider.carRental.pickup.min"></span>
+                                </span>
+                            </div>
+                            <div class="col-xs-6 col-sm-4 form-group">
+                                <label for="rentalCarReturnDate" class="control-label">Return Date</label>
+                                <div class="input-group">
+                                    <input type="text"
+                                           name="rentalCarReturnDate"
+                                           id="rentalCarReturnDate"
+                                           data-datepicker-popup="MM/dd/yyyy"
+                                           data-date-picker
+                                           data-ng-model="vm.state.quote.policy.rentalCarReturnDateFormatted"
+                                           class="form-control"
+                                           data-valid-date-after="vm.state.quote.policy.rentalCarPickupDateFormatted"
+                                           data-valid-date-before="vm.state.quote.policy.returnDate"
+                                           data-is-open="vm.rentalCarReturnDatePicker"
+                                           ng-required="coverage.selected"
+                                           ng-change="vm.checkRentalInfoAfterReturnDateChange(coverage, !optionalCarCoverage.$invalid)"
+                                           data-min-date="minDate"
+                                           data-close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" ng-click="vm.openDatePicker($event, vm, 'rentalCarReturnDatePicker','rentalCarPickupDatePicker')">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+
+                                </div>
+                                <span data-ng-show="optionalCarCoverage.rentalCarReturnDate.$invalid && optionalCarCoverage.rentalCarReturnDate.$touched">
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="optionalCarCoverage.rentalCarReturnDate.$error.required" ng-bind="vm.errors.provider.carRental.returnDate.req"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="optionalCarCoverage.rentalCarReturnDate.$error.dateBefore" ng-bind="vm.errors.provider.carRental.returnDate.max"></span>
+                                    <span class="help-block haserrorfieldlevel" data-ng-show="optionalCarCoverage.rentalCarReturnDate.$error.dateAfter" ng-bind="vm.errors.provider.carRental.returnDate.min"></span>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

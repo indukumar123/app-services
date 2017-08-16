@@ -1,0 +1,145 @@
+﻿<div id="bhtpReceipt" ng-form="stepForm">
+    
+    <div ng-show="vm.step === vm.tabs.aircare.receipt">
+        <div class="row">
+            <div class="col-md-4 pull-left">
+                <h1>
+                    Purchase Receipt
+                    <a href="#" data-ng-print data-print-element-id="bhtpReceipt" class="no-print"><span class="fa fa-print"></span></a>
+                </h1>
+                <span>This receipt has been sent to the primary traveler.</span>
+            </div>
+            <div class="col-md-8 pull-right text-right only-print">
+                <img src="/Content/images/bhtp_logo_horizontal.png" alt="BHTP">
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-lg btn-cust" data-ng-hide="!vm.isCustomSession()" data-ng-click="vm.loadTramsReceipt()">Continue to Trams Import</button>
+        </div>
+
+        <div class="row">
+            <hr />
+        </div>
+    
+        <h2 ng-if="vm.receiptState.customForm.length === 0">Trip summary for policy <a class="cursor" data-ng-click="vm.navigateToPolicyViewFromReceipt()"># {{vm.state.policy.policy.policyNumber}}</a></h2>
+        <h2 ng-if="vm.receiptState.customForm.length > 0">Trip summary for policy # {{vm.state.policy.policy.policyNumber}}</h2>
+
+        <h3>Trip Dates</h3>
+        <h4>{{ vm.receiptDepartureDate() }} - {{ vm.receiptReturnDate() }}</h4>
+        <hr />
+
+        <h3>Flights</h3>
+        
+        <div class="panel-body">
+            <div class="row">
+                <div class="table-responsive col-md-6">
+                    <div class="row">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr class="{{vm.readonly?'readonly-':''}}table-header">
+                                    <th>Date</th>
+                                    <th>From/To</th>
+                                    <th>Airline</th>
+                                    <th>Flight Number</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat-start="flight in vm.state.policy.flights" 
+                                        ng-form="flightForm"
+                                        class="{{vm.getRowIndexClass($index)}} {{vm.getDataRowClass(flight.acknowledgements)}}">
+                                    <td>{{flight.departureDate}}</td>
+                                    <td>{{flight.departureAirportCode}}<img src="/Content/images/rightArrow.jpg">{{flight.arrivalAirportCode}}</td>
+                                    <td>{{flight.airlineName}}</td>
+                                    <td>{{flight.flightNumber}}</td>
+                                </tr>
+                                <tr ng-repeat-end="flight in vm.state.policy.flights" 
+                                        ng-if="flight.acknowledgements && flight.acknowledgements.length > 0"
+                                        ng-form="flightForm"
+                                        class="view-acknowledgements {{vm.getRowIndexClass($index)}}">
+                                    <td colspan="4">
+                                        <view-acknowledgements acknowledgements="flight.acknowledgements">
+                                        </view-acknowledgements>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <hr />
+        <h3>Travelers</h3>
+        
+        <div class="panel-body">
+            <div class="row">
+                <div class="table-responsive col-md-6">
+                    <div class="row">
+                        <table class="table table-striped table-condensed">
+                            <thead>
+                                <tr class="{{vm.readonly?'readonly-':''}}table-header">
+                                    <th>Name</th>
+                                    <th>Birth Date</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{vm.state.policy.primaryTraveler.firstName}} {{vm.state.policy.primaryTraveler.lastName}}</td>
+                                    <td>{{vm.state.policy.primaryTraveler.birthDate | date : vm.dateFormat}}</td>
+                                    <td>{{vm.state.policy.primaryCustomer.emailAddress}}</td>
+                                    <td>{{vm.state.policy.primaryCustomer.phoneNumber}}</td>
+                                </tr>
+                                <tr data-ng-repeat="traveler in vm.state.policy.secondaryTravelers | orderBy : ['firstName','lastName']">
+                                    <td>{{traveler.firstName}} {{traveler.lastName}}</td>
+                                    <td>{{traveler.birthDate | date : vm.dateFormat}}</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <hr/>
+        <h3>Billing Information</h3>
+        <div class="panel-body">
+            <div class="row">
+                <div class="table-responsive col-md-6">
+                    <div class="row">
+                        <table class="table table-striped table-condensed">
+                            <thead>
+                                <tr class="table-header">
+                                    <th colspan="2">Card Payment Details</th>
+                                </tr>
+                            </thead>                            
+                            <tr>
+                                <td class="col-md-4">Name on Card</td>
+                                <td>{{vm.state.billing.name}}</td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">Card Number</td>
+                                <td>{{vm.state.billing.cardType}} ending in {{vm.state.billing.last4}}</td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">Amount Charged</td>
+                                <td>{{vm.state.policy.policy.premium| currency}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h3>Coverages Per Traveler</h3>
+
+        <div class="row">
+            <coverage-list coverages="vm.state.policy.primaryTraveler.coverages" mode="'receipt'" hide-headers="true"></coverage-list>
+            <br />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿<div class="row wizardnav">
+    <div class="col-xs-2 col-sm-6 ">
+        <button id="btn_previous_ec" class="btn btn-lg btn-cust" data-ng-show="vm.currentStep.id > 0" data-ng-click="vm.navigateToPreviousStep()">
+            <span class="fa fa-arrow-circle-left navleftarrow"></span>&nbsp;Previous
+        </button>
+    </div>
+    <div class="col-xs-10 col-sm-6 navright">
+        <span data-ng-show="vm.currentStep.id > 0">
+            <button id="btn_saveQuote_ec" class="btn btn-lg btn-cust-sec" data-ng-disabled="!vm.canSaveOrEmail()" data-ng-click="vm.saveQuote()">Save Quote</button>
+            <button id="btn_emailQuote_ec" class="btn btn-lg btn-cust-sec" data-ng-disabled="!vm.canSaveOrEmail()" data-ng-show="vm.canEmailQuote()" data-ng-click="vm.emailQuote()">Email Quote</button>
+        </span>
+        <button type="submit" id="btn_next_ec" class="btn btn-lg btn-cust" data-ng-hide="vm.isPurchaseStep()"
+                data-ng-click="vm.navigateToNextStep()" data-ng-disabled="!vm.canContinue">
+            Next&nbsp;<span class="fa fa-arrow-circle-right navrightarrow"></span>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+﻿<section class="policyEdit">
+    <h2>Purchase</h2>
+    <payment-i-frame class="iframe-height" storage-prefix="policyedit" state="vm.state" callback="vm.purchase" errors="vm.purchaseErrors" ng-if="vm.currentStep.code == 'purchase'"></payment-i-frame>
+    <div class="row">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-lg btn-default btn-cust" data-ng-click="vm.navigateToPreviousStep()"><i class="fa fa-arrow-circle-left"></i>&nbsp;Previous</button>
+            <div class="pull-right">
+                <button type="button" class="btn btn-lg btn-cust-sec" data-ng-click="vm.cancelChanges()" data-ng-show="vm.agent.isAmbassador == false">Cancel</button>&nbsp;
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,203 @@
+﻿<div id="agentBhtpReceipt">
+    <div class="row">
+        <div class="col-xs-8">
+            <div class="only-print">
+                <img src="/Content/images/bhtp_logo_horizontal.png" width="240" alt="BHTP">
+            </div>
+            <h2>Purchase Summary</h2>
+            <h6>Policy <a class="cursor" data-ng-click="vm.navigateToPolicyViewFromReceipt()">#{{vm.policyNumber}}</a></h6><br />
+            <p>This receipt has been sent to the primary traveler.</p>
+        </div>
+        <div class="col-xs-4">
+            <a href="#" data-ng-print data-print-element-id="agentBhtpReceipt" class="no-print"><h5 style="margin-top:29px; padding-left:0;" class="pull-right cursor"><span class="fa fa-print"></span>&nbsp;Print Receipt</h5></a>
+        </div>
+    </div>
+
+    <div class="row" ng-if="vm.state.payment != null">
+        <div class="col-xs-12">
+            <h3>Billing Information</h3>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Payment Method</th>
+                            <th>Amount Charged</th>
+                            <th>Billing Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{vm.state.billing.cardType}} ending in {{vm.state.payment.card.last4}}</td>
+                            <td>{{vm.state.payment.dollarAmount ? vm.state.payment.dollarAmount : vm.state.payment.amount | currency}}</td>
+                            <td rowspan="2">
+                                {{vm.state.payment.card.name}}<br />
+                                {{vm.state.payment.card.address1}}<br />
+                                {{vm.state.payment.card.address2}}<br ng-show="vm.state.payment.card.address2.length > 0" />
+                                {{vm.state.payment.card.city}},
+                                {{vm.state.payment.card.stateOrProvince}}
+                                {{vm.state.payment.card.postalCode}}
+                            </td>
+                        </tr>
+                        <tr ng-repeat="refund in vm.state.refundTransactions">
+                            <td>Credit Card (refund)</td>
+                            <td>{{refund.amount | currency}}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div ng-show="vm.isAirCare() && vm.departureDate() && vm.returnDate()">
+        <h3>Travel Dates</h3>
+        <h4>{{ vm.departureDate() }} &ndash; {{ vm.returnDate() }}</h4>
+    </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Travelers</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="50%">Name</th>
+                                <th>Date of Birth</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="Traveler in vm.receipt.travelers | orderBy: ['!isPrimary','firstName','lastName']">
+                                <td width="50%">{{Traveler.firstName}} {{Traveler.lastName}}</td>
+                                <td>{{Traveler.birthDate | date:'MM/dd/yyyy'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="vm.isExactCare()">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Trip</h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="50%">Destination Country</th>
+                                    <th>Travel Dates</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-show="vm.isExactCare()">
+                                    <td width="50%">{{vm.receipt.policy.destination}}</td>
+                                    <td>
+                                        {{ vm.departureDate() }} &ndash; {{ vm.returnDate() }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="vm.isAirCare()">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Flights</h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>From/To</th>
+                                    <th>Airline</th>
+                                    <th>Flight Number</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat-start="flight in vm.receipt.flights track by $index"
+                                        class="{{vm.getRowIndexClass($index)}} {{vm.getDataRowClass(flight.acknowledgements)}}">
+                                    <td>{{flight.departureDate | date:'MM/DD/YYYY'}}</td>
+                                    <td>{{flight.departureAirportCode}} <i class="fa fa-long-arrow-right"></i> {{flight.arrivalAirportCode}}</td>
+                                    <td>{{flight.airlineName}}</td>
+                                    <td>{{flight.flightNumber}}</td>
+                                </tr>
+                                <tr ng-repeat-end
+                                        ng-if="flight.acknowledgements && flight.acknowledgements.length > 0"
+                                        class="view-acknowledgements {{vm.getRowIndexClass($index)}}">
+                                    <td colspan="4">
+                                        <view-acknowledgements acknowledgements="flight.acknowledgements">
+                                        </view-acknowledgements>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Coverages Per Traveler</h3>
+                <div class="table-responsive coverages">
+                    <div class="row">
+                        <div class="table-responsive col-md-6">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Included</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat-start="coverage in vm.receipt.travelers[0].includedCoverages"
+                                            class="{{vm.getRowIndexClass($index)}} {{vm.getDataRowClass(coverage.acknowledgements)}}">
+                                        <td width="65%">{{coverage.name}}</td>
+                                        <td style="text-align:right;">{{coverage.coverageDisplayString}}</td>
+                                    </tr>
+                                    <tr ng-repeat-end
+                                        class="view-acknowledgements {{vm.getRowIndexClass($index)}}"
+                                        ng-if="coverage.acknowledgements && coverage.acknowledgements.length > 0">
+                                        <td colspan="2">
+                                            <view-acknowledgements acknowledgements="coverage.acknowledgements">
+                                            </view-acknowledgements>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive col-md-6" ng-show="vm.receipt.travelers[0].optionalCoverages.length > 0">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Optional</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat-start="coverage in vm.receipt.travelers[0].optionalCoverages"
+                                            class="{{vm.getRowIndexClass($index)}} {{vm.getDataRowClass(coverage.acknowledgements)}}">
+                                        <td width="65%">
+                                            {{coverage.name}}
+                                        </td>
+                                        <td style="text-align:right;">
+                                            {{ vm.getOptionalCoverageDisplayOrLimit(coverage) }}
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat-end
+                                        class="view-acknowledgements {{vm.getRowIndexClass($index)}}"
+                                        ng-if="coverage.acknowledgements && coverage.acknowledgements.length > 0">
+                                        <td colspan="2">
+                                            <view-acknowledgements acknowledgements="coverage.acknowledgements">
+                                            </view-acknowledgements>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
